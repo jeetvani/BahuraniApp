@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "546235601231",
+    "project_id": "bahuraniapp",
+    "storage_bucket": "bahuraniapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546235601231:android:69cbb38e15f5e8ea66f53a",
+        "android_client_info": {
+          "package_name": "com.app.bahuraniapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546235601231-c9u02u2n219ciejblddmpd8hoaojfctg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.bahuraniapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "546235601231-f3npo8jl26alauqv7r88k4481vqgt2b4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkgPYKqZm5d4ukPBhtYn53lfAiGQmvkJg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546235601231-f3npo8jl26alauqv7r88k4481vqgt2b4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "546235601231-7i340l1v10fiqevroevacl339f043jl8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.bahuraniapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
