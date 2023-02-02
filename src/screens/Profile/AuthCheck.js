@@ -1,11 +1,12 @@
 import { View, Text, ActivityIndicator } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import checkAuth from "../../functions/checkAuth";
 import { COLORS } from "../../Constants/res/COLORS";
 import { useNavigation } from "@react-navigation/native";
 import { authStackScreens } from "../../Constants/appScreens";
 
 export default function AuthCheck() {
+  const [isLoading, setisLoading] = useState(true)
   const navigation = useNavigation();
   const mainFunction = () => {
     checkAuth().then((res) => {
@@ -15,7 +16,7 @@ export default function AuthCheck() {
         navigation.navigate(authStackScreens.AccountDetails.name);
       } else {
         // navigate to phone input
-        navigation.navigate(authStackScreens.PhoneInput.name);
+        navigation.navigate("PhoneInput1");
       }
     });
   };
@@ -23,7 +24,7 @@ export default function AuthCheck() {
     navigation.addListener("focus", () => {
       mainFunction();
     });
-    mainFunction();
+    
   });
 
   return (

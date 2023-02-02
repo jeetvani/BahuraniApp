@@ -28,6 +28,10 @@ export default function AuthStack() {
         name={authStackScreens.Addresses.name}
         component={authStackScreens.Addresses.screen}
       />
+   <Stack.Screen
+        name={authStackScreens.Referrals.name}
+        component={authStackScreens.Referrals.screen}
+      />
 
       <Stack.Screen
         name={authStackScreens.Orders.name}

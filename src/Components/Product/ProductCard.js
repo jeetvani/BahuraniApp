@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ToastAndroid,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import Image from "react-native-scalable-image";
@@ -13,7 +13,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import checkAuth from "../../functions/checkAuth";
-import { addToCartAPI } from "../../API/lib/product";
+import { addToCartAPI, checkProductInCartAPI } from "../../API/lib/product";
 export default function ProductCard({
   img,
   title,
@@ -26,8 +26,32 @@ export default function ProductCard({
   ProductId,
   addToCartFunction,
 }) {
+  useEffect(() => {
+    checkProductInCart();
+  }, []);
+  const [isInCart, setIsInCart] = React.useState(true);
+  const [quantity, setQuantity] = React.useState(1);
   const navigation = useNavigation();
   const route = useRoute();
+
+  const checkProductInCart = () => {
+    //check if product is in cart
+    //if yes then return true
+    //else return false
+    checkAuth().then((res) => {
+      if (res) {
+        checkProductInCartAPI(ProductId).then((res) => {
+          if (res.data.status == 100) {
+            setIsInCart(true);
+            setQuantity(res.data.quantity);
+          } else {
+            setIsInCart(false);
+          }
+        });
+      }
+    });
+  };
+
   const addToCart = () => {
     //if user is not logged in then navigate to login screen
     //else add to cart
@@ -41,9 +65,10 @@ export default function ProductCard({
           .then((response) => {
             if (response.data.status == 200) {
               ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+              checkProductInCart();
               console.log(route.name);
               if (route.name == "CartMain") {
-              addToCartFunction(); 
+                addToCartFunction();
               }
             }
             if (response.data.status == 400) {
@@ -108,14 +133,37 @@ export default function ProductCard({
               ₹ {ourPrice}
             </Text>
           </View>
-          <View style={{ flex: 1, alignItems: "flex-end" }}>
-            <View style={styles.addToCartButtonContainer}>
-              <TouchableOpacity onPress={addToCart}>
+          <View style={{ flex: 3, alignItems: "flex-end" }}>
+            {isInCart ? (
+              <View style={styles.counter}>
+                <View style={{flexDirection:'row'}}>
+<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
+<Text>
+  <FontAwesome name="minus" color={COLORS.primary} size={10} />
+</Text>
+</View>
+<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
+<Text>
+  <Text style={{color:COLORS.primary}}>{quantity}</Text>
+</Text>
+</View>
+<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
+<Text><FontAwesome name="plus" color={COLORS.primary} size={10} />
+</Text>
+</View>
+
+                </View>
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={addToCart}
+                style={styles.addToCartButtonContainer}
+              >
                 <Text style={{ color: COLORS.primary, fontWeight: "bold" }}>
-                  <Ionicons name="add" size={16} />
+                  <Ionicons name="add" size={18} />
                 </Text>
               </TouchableOpacity>
-            </View>
+            )}
           </View>
         </View>
       </View>
@@ -161,11 +209,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     paddingVertical: 3,
-    width: 30,
+    width: 40,
     justifyContent: "center",
     alignItems: "center",
     borderColor: COLORS.gray,
     borderRadius: 8,
     backgroundColor: COLORS.white,
   },
+  counter:{
+    backgroundColor: COLORS.black,
+    elevation: 2,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    paddingVertical: 3,
+    width: 60,
+    justifyContent: "center",
+    borderColor: COLORS.gray,
+    left:10,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
+ 
+  }
 });

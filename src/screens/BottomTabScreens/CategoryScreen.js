@@ -22,12 +22,12 @@ export default function CategoryScreen() {
     setLoading(true);
     getCategories()
       .then((res) => {
-        console.log(res.data);
+      //  console.log(res.data);
         setCategories(res.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       })
       .finally(() => {
         setLoading(false);

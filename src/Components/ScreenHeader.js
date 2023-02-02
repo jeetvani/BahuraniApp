@@ -61,7 +61,7 @@ export default function ScreenHeader({
                 color="#000"
               />
               <TextInput
-                autoFocus={autoFocus}
+                autoFocus={false}
                 onFocus={
                   onSearchFocus
                     ? onSearchFocus

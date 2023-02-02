@@ -1,17 +1,46 @@
-import { View, Text, ScrollView, TextInput, Dimensions } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TextInput,
+  Dimensions,
+  BackHandler,
+} from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
 import { FontAwesome } from "@expo/vector-icons";
 import PrimaryButton from "../../Components/PrimaryButton";
-import { useNavigation } from "@react-navigation/native";
-import { authStackScreens } from "../../Constants/appScreens";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { appStackScreens, authStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import generateOTP from "../../functions/generateOTP";
 export default function PhoneInput() {
   const [textInputFocused, settextInputFocused] = useState(false);
   const navigation = useNavigation();
   const [isLoading, setisLoading] = React.useState(false);
   const [phoneNumber, setPhoneNumber] = React.useState("");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const onBackPress = () => {
+        console.log("back pressed");
+        
+      navigation.reset({
+        index: 0,
+        routes: [{ name: bottomTabScreens.HomeScreen.name }],
+      });
+         
+      };
+
+      const subscription = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => subscription.remove();
+    }, [])
+  );
+
   async function sendOTP() {
     const number = phoneNumber;
     const final = `+91` + number;
@@ -20,7 +49,7 @@ export default function PhoneInput() {
     generateOTP(final)
       .then((res) => {
         console.log(res);
-        navigation.navigate(authStackScreens.OTPInput.name, {
+        navigation.navigate("OTPInput1", {
           verificationId: res.verificationId,
           phoneNumber: phoneNumber,
         });
@@ -45,7 +74,6 @@ export default function PhoneInput() {
       <View style={{ flex: 1, justifyContent: "center" }}>
         <PrimaryAuthHeader
           headText={"Sign in to Bahurani Mart !"}
-          subText={"to access your Addresses , Orders & Wishlist "}
         />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>
@@ -89,7 +117,6 @@ export default function PhoneInput() {
         }}
       >
         <PrimaryButton
-        
           buttonHeight={50}
           fontSize={20}
           isLoading={isLoading}

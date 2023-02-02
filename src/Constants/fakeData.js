@@ -23,7 +23,27 @@ export var CouponData = [
 ];
 
 
-export var fakeReferalData = [
+export var fakeReferralData = [
+{
+  UsedBy: "Amit",
+  Date: "12/12/2020",
+  User_Id : "123456789",
+},
+{
+  UsedBy: "Suruchi",
+  Date: "22/05/2020",
+  User_Id : "123456789",
+},
+{
+    UsedBy: "Akshay",
+    Date: "29/11/2021",
+    User_Id : "123456789",
+},
+{
+  UsedBy: "Jeet",
+  Date: "18/03/2021",
+  User_Id : "123456789",
+}
 
 ]
 

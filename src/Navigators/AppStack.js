@@ -28,10 +28,6 @@ export default function AppStack() {
         component={appStackScreens.AdminUserChat.screen}
       />
       <Stack.Screen
-        name={appStackScreens.NotificationSettings.name}
-        component={appStackScreens.NotificationSettings.screen}
-      />
-      <Stack.Screen
         name={appStackScreens.ProductScreen.name}
         component={appStackScreens.ProductScreen.screen}
       />

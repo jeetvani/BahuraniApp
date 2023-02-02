@@ -9,50 +9,41 @@ import {
 import Image from "react-native-scalable-image";
 import React, { useEffect, useState } from "react";
 import ScreenHeader from "../../Components/ScreenHeader";
-import SearchBar from "../../Components/SearchBar";
 import Banner from "../../Components/Banner";
 import { COLORS } from "../../Constants/res/COLORS";
 import HomeScreenLayout from "../../Components/HomeScreenCompoenents/HomeScreenLayout";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import { useNavigation } from "@react-navigation/native";
-import CategoryCard from "../../Components/Category/CategoryCard";
-import { fakeCategoryData } from "../../Constants/fakeData";
 import ProductCard from "../../Components/Product/ProductCard";
-import {
-  Ionicons,
-  AntDesign,
-  FontAwesome,
-  FontAwesome5,
-} from "@expo/vector-icons";
 import OfferBanner from "../../Components/HomeScreenCompoenents/OfferBanner";
-import { getProducts } from "../../API/lib/user";
 import { getCategories, getPreferableProducts } from "../../API/lib/product";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 export default function HomeScreen() {
-
   const [preferableProducts, setPreferableProducts] = useState([]);
   const [isLoading, setisLoading] = useState(true);
   const navigation = useNavigation();
 
-
   useEffect(() => {
-    getPreferableProducts().then((res) => {
-      console.log(res.data);
-      setPreferableProducts(res.data.PreferableProducts);
-      setisLoading(false);
-    });
+    //Priority 1
+
     getCategories()
-      .then((res) => {
-        console.log(res.data);
+      .then(async (res) => {
+     //   console.log(res.data);
         //get first 6 categories
         if (res.data.length > 6) {
-          setCategories(res.data.slice(0, 6));
+          await setCategories(res.data.slice(0, 6));
         } else {
-          setCategories(res.data);
+          await setCategories(res.data);
         }
+
+        getPreferableProducts().then(async (res) => {
+        //  console.log(res.data);
+          await setPreferableProducts(res.data.PreferableProducts);
+          setisLoading(false);
+        });
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
   const [Categories, setCategories] = useState([]);
@@ -157,7 +148,7 @@ export default function HomeScreen() {
                   }}
                 >
                   <View>
-                    <Image source={{ uri: item.CategoryImage }} width={75} />
+                    <Image source={{ uri: item.CategoryImage }} width={75} height={75} />
                     <Text
                       numberOfLines={2}
                       style={{
@@ -187,16 +178,3 @@ export default function HomeScreen() {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  layoutContainer: {
-    marginTop: 20,
-    paddingVertical: 20,
-    backgroundColor: COLORS.white,
-    marginHorizontal: 30,
-    borderTopWidth: 0,
-    borderColor: COLORS.primary,
-    borderBottomWidth: 0,
-    padding: 10,
-    marginVertical: 5,
-  },
-});

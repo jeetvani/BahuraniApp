@@ -6,7 +6,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { appStackScreens } from "../Constants/appScreens";
+import { appStackScreens, authStackScreens } from "../Constants/appScreens";
 
 export default function RootNavigation() {
   const stack = createStackNavigator();
@@ -28,6 +28,20 @@ export default function RootNavigation() {
           name={"CartMain"}
           component={appStackScreens.CartScreen.screen}
         />
+          <stack.Screen
+        name={appStackScreens.NotificationSettings.name}
+        component={appStackScreens.NotificationSettings.screen}
+      />
+    
+        <stack.Screen
+          name={"PhoneInput1"}
+          component={authStackScreens.PhoneInput.screen}
+        />
+        <stack.Screen
+          name={"OTPInput1"}
+          component={authStackScreens.OTPInput.screen}
+        />
+       
         <stack.Screen
           name={appStackScreens.FinalizeOrder.name}
           options={{

@@ -55,6 +55,7 @@ export default function BottomTabNavigator() {
 
       <Tab.Screen
         options={{
+          
           tabBarIcon: ({ focused }) => (
             <BottomTabIcon iconName={focused ? "person" : "person-outline"} />
           ),

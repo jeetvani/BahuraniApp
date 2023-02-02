@@ -195,6 +195,9 @@ export default function AccountDetails() {
                 borderColor={COLORS.black}
                 textColor={COLORS.black}
                 textAlign={"left"}
+                onPress={()=>{
+                  navigation.navigate(authStackScreens.Referrals.name)
+                }}
                 content={"Your Referrals & Rewards"}
                 icon={"award"}
                 fontSize={14}

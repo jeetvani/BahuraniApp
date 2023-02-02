@@ -9,12 +9,10 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import ScreenHeader from "../../Components/ScreenHeader";
-import { AirbnbRating } from "react-native-ratings";
 import { COLORS } from "../../Constants/res/COLORS";
 import ProductDetailsBanner from "../../Components/Product/ProductDetailsBanner";
 import PrimaryButton from "../../Components/PrimaryButton";
 import ProductCard from "../../Components/Product/ProductCard";
-import { fakeCategoryData } from "../../Constants/fakeData";
 import HomeScreenLayout from "../../Components/HomeScreenCompoenents/HomeScreenLayout";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
@@ -23,20 +21,19 @@ import {
   checkProductInCartAPI,
   decreaseProductQuantityAPI,
   deleteProductFromCartAPI,
+  getPreferableProducts,
   getProductById,
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
 import checkAuth from "../../functions/checkAuth";
 import {
-  appStackScreens,
-  authStackScreens,
   bottomTabScreens,
 } from "../../Constants/appScreens";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
-
   const ProductId = route.params.ProductId;
   const [Quantity, setQuantity] = useState(1);
+  const [PrefferableProducts, setPrefferableProducts] = useState([]);
   const [Expanded, setExpanded] = useState(false);
   const [isLoading, setisLoading] = useState(true);
   const [IsExitsInCart, setIsExitsInCart] = useState(false);
@@ -113,13 +110,17 @@ export default function ProductDetails({ route }) {
   };
 
   const unsubscribe = navigation.addListener("focus", async () => {
-    await getProductById(ProductId).then((res) => {
+    await getProductById(ProductId).then(async (res) => {
       const ProductName = res.data[0].ProductName;
       setProductName(ProductName);
       setVariants(res.data[0].Variants);
       setSelectedVariant(res.data[0].Variants[0]);
       setProductDescription(res.data[0].ProductDescription);
-    setProductImages(res.data[0].ProductImages);
+      setProductImages(res.data[0].ProductImages);
+
+      await getPreferableProducts().then((res) => {
+        setPrefferableProducts(res.data.PreferableProducts);
+      });
     });
 
     await checkAuth().then((res) => {
@@ -266,41 +267,22 @@ export default function ProductDetails({ route }) {
               <View style={{ marginVertical: 5 }}>
                 <FlatList
                   horizontal
-                  data={fakeCategoryData}
+                  data={PrefferableProducts}
                   renderItem={({ item }) => (
                     <ProductCard
-                      img={item.image}
-                      mrp={item.mrp}
-                      ourPrice={item.ourPrice}
-                      variant={item.numberOfItems}
-                      title={item.name}
+                      Variants={item.Variants}
+                      img={item.ProductImages[0]}
+                      mrp={item.Variants[0].mrp}
+                      ourPrice={item.Variants[0].ourPrice}
+                      variant={item.Variants[0].name}
+                      Images={item.ProductImages}
+                      title={item.ProductName}
+                      ProductId={item.ProductId}
                     />
                   )}
                   showsHorizontalScrollIndicator={false}
                 />
               </View>
-            </View>
-          </View>
-          <View>
-            <Text
-              style={{
-                fontWeight: "bold",
-                marginHorizontal: 30,
-              }}
-            >
-              Rate this Product
-            </Text>
-            <View style={{ bottom: 20 }}>
-              <AirbnbRating
-                onFinishRating={(rating) => {
-                  console.log(rating);
-                }}
-                size={20}
-                reviews={false}
-                reviewSize={1}
-                count={5}
-                selectedColor={COLORS.primary}
-              />
             </View>
           </View>
         </ScrollView>

@@ -11,7 +11,7 @@ import ScreenHeader from "../../Components/ScreenHeader";
 import * as Data from "../../Constants/fakeData";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { appStackScreens } from "../../Constants/appScreens";
+import { appStackScreens, authStackScreens } from "../../Constants/appScreens";
 import PrimaryButton from "../../Components/PrimaryButton";
 import Image from "react-native-scalable-image";
 import { AirbnbRating } from "react-native-ratings";
@@ -19,15 +19,18 @@ export default function Referrals() {
   const navigation = useNavigation();
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <ScreenHeader backButton heading={"Your Orders"} />
+      <ScreenHeader backButton heading={"Your Refer Users"} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 10 }}>
           <View style={{ marginTop: 10 }}>
             <FlatList
               showsVerticalScrollIndicator={false}
-              data={Data.fakeOrderData}
+              data={Data.fakeReferralData}
               renderItem={({ item }) => (
-                <View
+                <TouchableOpacity
+                onPress={()=>navigation.navigate(authStackScreens.Orders.name,{
+                  Name : item.UsedBy,
+                })}
                   style={{
                     flexDirection: "row",
                     marginVertical: 10,
@@ -51,7 +54,7 @@ export default function Referrals() {
                         color: COLORS.black,
                       }}
                     >
-                      {item.orderId}
+                      {item.UsedBy} Used Your Referral Code on
                     </Text>
                     <Text
                       style={{
@@ -60,7 +63,7 @@ export default function Referrals() {
                         fontWeight: "bold",
                       }}
                     >
-                      {item.Product_Name}
+                      {item.Date}
                     </Text>
                     <Text
                       style={{
@@ -69,62 +72,15 @@ export default function Referrals() {
                         color: COLORS.black,
                       }}
                     >
-                      {item.Address}
+                     User Id :  {item.User_Id}
                     </Text>
-                    <Text
-                      style={{
-                        color: COLORS.black,
-                      }}
-                    >
-                      {item.ourPrice}
-                    </Text>
-                    <Text
-                      style={{
-                        color: COLORS.black,
-                      }}
-                    >
-                      {item.orderDate}
-                    </Text>
-                    <Text
-                      style={{
-                        paddingVertical: 5,
-                        color:
-                          item.orderStatus == "Delivered"
-                            ? COLORS.Positive
-                            : COLORS.Yellow,
-                      }}
-                    >
-                      {item.orderStatus == "Delivered"
-                        ? `Delivered on ${item.orderDate}`
-                        : item.orderStatus}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Image source={{ uri: item.image }} width={100} />
-                    <View>
-                      {item.orderStatus == "Delivered" ? (
-                        <View >
-                          <AirbnbRating
-                            onFinishRating={(rating) => {
-                              console.log(rating);
-                            }}
-                            size={15}
-                            reviews={false}
-                            reviewSize={1}
-                            count={5}
-                            selectedColor={COLORS.primary}
-                          />
-                        </View>
-                      ) : null}
+                    
                     </View>
-                  </View>
+                <View style={{flex:1}}>
+                <Image source={{ uri: 'https://support.hubstaff.com/wp-content/uploads/2019/08/good-pic-300x286.png' }} width={100} />
+                 
                 </View>
+                </TouchableOpacity>
               )}
             />
           </View>

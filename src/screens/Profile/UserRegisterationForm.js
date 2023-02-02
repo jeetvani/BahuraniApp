@@ -33,16 +33,45 @@ export default function UserRegistrationForm({ route }) {
   const [HouseNo, setHouseNo] = useState("");
   const registerUser = async () => {
     //check if all fields are filled
-    if (false) {
+    if (Name == "" || PinCode == "") {
       alert("Please fill all the fields");
       return;
     } else {
-      //alert if image is not selected
       if (
         ImgSrc ==
         "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
       ) {
-        alert("Please select an image");
+        const userObj = {
+          name: Name,
+          phoneNumber: phoneNumber,
+          profilePicture: ImgSrc,
+          referCode: ReferCode,
+          address:
+            Street +
+            " | " +
+            HouseNo +
+            " | " +
+            Landmark +
+            " | " +
+            City +
+            " | " +
+            State,
+          PinCode: PinCode,
+        };
+        userRegister(userObj).then((res) => {
+          console.log(res.data);
+          if (res.data.status == 200) {
+            const UserId = res.data.userId;
+            AsyncStorage.setItem("UserId", UserId);
+            console.log("User Registered Successfully");
+            setisLoading(false);
+            navigation.navigate(authStackScreens.AuthCheck.name);
+          } else {
+            console.log("User Registration Failed");
+            alert("User Registration Failed");
+            setisLoading(false);
+          }
+        });
         return;
       } else {
         setisLoading(true);
@@ -55,6 +84,7 @@ export default function UserRegistrationForm({ route }) {
 
           reference.getDownloadURL().then((url) => {
             console.log(url);
+
             const userObj = {
               name: Name,
               phoneNumber: phoneNumber,
