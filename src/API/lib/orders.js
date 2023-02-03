@@ -5,6 +5,21 @@ import { COLORS } from "../../Constants/res/COLORS";
 import { useNavigation } from "@react-navigation/native";
 import { appStackScreens } from "../../Constants/appScreens";
 
+export async function getOrdersAPI() {
+  const UserId = await AsyncStorage.getItem("UserId");
+  axiosClient
+    .post("/getUserOrders", { UserId: UserId })
+    .then((res) => {
+      console.log(res.data);
+      return res.data;
+    })
+    .catch((err) => {
+      {
+        console.log(err);
+        return err;
+      }
+    });
+}
 export async function createOrder(orderObj) {
   const userId = await AsyncStorage.getItem("userId");
   return axiosClient.post("/createOrder", {

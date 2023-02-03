@@ -26,12 +26,13 @@ export default function ProductCard({
   ProductId,
   addToCartFunction,
 }) {
+  const navigation = useNavigation();
+ 
   useEffect(() => {
     checkProductInCart();
-  }, []);
+  }, [navigation]);
   const [isInCart, setIsInCart] = React.useState(true);
   const [quantity, setQuantity] = React.useState(1);
-  const navigation = useNavigation();
   const route = useRoute();
 
   const checkProductInCart = () => {

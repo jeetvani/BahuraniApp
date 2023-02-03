@@ -16,14 +16,24 @@ import { appStackScreens } from "../../Constants/appScreens";
 import PrimaryButton from "../../Components/PrimaryButton";
 import Image from "react-native-scalable-image";
 import { AirbnbRating } from "react-native-ratings";
+import { getOrdersAPI } from "../../API/lib/orders";
 export default function Orders({ route }) {
   const [isLoading, setisLoading] = useState(true);
-  const getUserOrders = async() => {
-
-    
+  const [OrderData, setOrderData] = useState([]);
+  const getUserOrders = async () => {
+    getOrdersAPI().then((response) => {
+      console.log(response);
+    });
   };
 
   const navigation = useNavigation();
+  const unsubscribe = navigation.addListener("focus", () => {
+    getUserOrders();
+
+    setisLoading(false);
+    return unsubscribe;
+  });
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScreenHeader backButton heading={"Your Orders"} />
@@ -43,7 +53,7 @@ export default function Orders({ route }) {
             <View style={{ marginTop: 10 }}>
               <FlatList
                 showsVerticalScrollIndicator={false}
-                data={Data.fakeOrderData}
+                data={OrderData}
                 renderItem={({ item }) => (
                   <View
                     style={{
