@@ -143,7 +143,11 @@ export default function AccountDetails() {
                 icon={"user-edit"}
                 fontSize={14}
                 onPress={() => {
-                  navigation.navigate(authStackScreens.EditProfile.name);
+                  navigation.navigate(authStackScreens.EditProfile.name,{
+                    phoneNumber:phoneNumber,
+                    profilePicture:profilePicture,
+                    userName:userName
+                  });
                 }}
                 borderRadius={4}
                 buttonHeight={50}

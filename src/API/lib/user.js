@@ -10,6 +10,16 @@ export function checkPhoneNumber(phoneNumber) {
 export function userLogin(phoneNumber) {
   return axiosClient.post("/Login", { phoneNumber: phoneNumber });
 }
+
+export async function updateProfilePicture(profilePic) {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/updateProfilePic", {
+    UserId: UserId,
+
+    profilePicture: profilePic,
+  });
+}
+
 export function userRegister(userObj) {
   return axiosClient.post("/signUp", {
     name: userObj.name,
@@ -17,7 +27,7 @@ export function userRegister(userObj) {
     profilePicture: userObj.profilePicture,
     referCode: userObj.referCode,
     address: userObj.address,
-    PinCode : userObj.PinCode
+    PinCode: userObj.PinCode,
   });
 }
 

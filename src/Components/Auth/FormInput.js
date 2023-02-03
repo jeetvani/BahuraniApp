@@ -8,6 +8,7 @@ export default function FormInput({
   onchangeText,
   keyBoardType,
   placeholder,
+  value
 }) {
   return (
     <View
@@ -31,6 +32,7 @@ export default function FormInput({
       <TextInput
         onChangeText={onchangeText}
         maxLength={maxLength}
+        value={value?value:null}
         placeholder={placeholder}
         keyboardType={keyBoardType}
         style={{

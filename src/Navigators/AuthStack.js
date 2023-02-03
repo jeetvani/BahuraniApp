@@ -52,6 +52,10 @@ export default function AuthStack() {
         component={authStackScreens.OTPInput.screen}
       />
 
+<Stack.Screen
+        name={authStackScreens.EditProfile.name}
+        component={authStackScreens.EditProfile.screen}
+      />
       <Stack.Screen
         name={authStackScreens.UserRegistrationForm.name}
         component={authStackScreens.UserRegistrationForm.screen}
