@@ -24,58 +24,82 @@ export default function CartProduct({
 }) {
   const navigation = useNavigation();
   const [Quantity, setQuantity] = useState(ProductQuantity);
+  const [processRunning, setProcessRunning] = useState(false);
 
-  const IncreaseProductQuantity = () => {
-    increaseProductQuantityAPI({
+  const IncreaseProductQuantity = async () => {
+    setProcessRunning(true);
+    await increaseProductQuantityAPI({
       ProductId: ProductId,
-    }).then((response) => {
-      console.log(response.data);
-      if (response.data.status == 200) {
-        setQuantity(parseInt(Quantity) + 1);
-        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-      functionQuantityChange()
-      }
-    });
+    })
+      .then(async (response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          setQuantity(parseInt(Quantity) + 1);
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          setProcessRunning(false);
+          functionQuantityChange();
+        }
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        setProcessRunning(false);
+      });
   };
 
-  const DecreaseProductQuantity = () => {
+  const DecreaseProductQuantity = async () => {
+    setProcessRunning(true);
     if (Quantity > 1) {
-      decreaseProductQuantityAPI({
+      await decreaseProductQuantityAPI({
         ProductId: ProductId,
       })
-        .then((response) => {
+        .then(async (response) => {
           console.log(response.data);
           if (response.data.status == 200) {
             setQuantity(parseInt(Quantity) - 1);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-              functionQuantityChange();
+            setProcessRunning(false);
+            functionQuantityChange();
           }
         })
         .catch((err) => {
+          setProcessRunning(false);
           ToastAndroid.show(err.message, ToastAndroid.SHORT);
         });
     }
     if (Quantity == 1) {
-      deleteProductFromCartAPI({
+      await deleteProductFromCartAPI({
         ProductId: ProductId,
-      }).then((response) => {
-        console.log(response.data);
-        if (response.data.status == 200) {
-          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-          //refresh cart screen
-        functionQuantityChange()
-        } else {
-          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-        }
-      });
+      })
+        .then(async (response) => {
+          console.log(response.data);
+
+          if (response.data.status == 200) {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            setProcessRunning(false);
+            //refresh cart screen
+            functionQuantityChange();
+          } else {
+            setProcessRunning(false);
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          }
+        })
+        .catch((err) => {
+          setProcessRunning(false);
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
     }
   };
   return (
-    <View style={{ flexDirection: "row",borderBottomWidth:0.4,paddingVertical:10 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        borderBottomWidth: 0.4,
+        paddingVertical: 10,
+      }}
+    >
       <View style={{ flex: 2 }}>
         <Image
           height={100}
-          
           source={{
             uri: ImgSrc,
           }}
@@ -125,6 +149,7 @@ export default function CartProduct({
       <View style={{ flex: 2, justifyContent: "flex-end", bottom: 15 }}>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
+            disabled={processRunning}
             onPress={DecreaseProductQuantity}
             style={{
               flex: 1,
@@ -146,12 +171,13 @@ export default function CartProduct({
               <FontAwesome name="minus" size={12} />
             </Text>
           </TouchableOpacity>
-          <View style={{ flex: 1 ,justifyContent:'center'}}>
+          <View style={{ flex: 1, justifyContent: "center" }}>
             <Text style={{ fontSize: 17, textAlign: "center" }}>
               {Quantity}
             </Text>
           </View>
           <TouchableOpacity
+            disabled={processRunning}
             onPress={IncreaseProductQuantity}
             style={{
               flex: 1,

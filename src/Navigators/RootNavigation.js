@@ -33,6 +33,10 @@ export default function RootNavigation() {
         component={appStackScreens.NotificationSettings.screen}
       />
     
+    <stack.Screen
+        name={appStackScreens.Policies.name}
+        component={appStackScreens.Policies.screen}
+      />
         <stack.Screen
           name={"PhoneInput1"}
           component={authStackScreens.PhoneInput.screen}

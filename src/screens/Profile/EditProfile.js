@@ -14,7 +14,7 @@ import PrimaryButton from "../../Components/PrimaryButton";
 import FormInput from "../../Components/Auth/FormInput";
 import { firebase } from "@react-native-firebase/storage";
 import ScreenHeader from "../../Components/ScreenHeader";
-import { updateProfilePicture } from "../../API/lib/user";
+import { updateProfilePicture, updateUserName } from "../../API/lib/user";
 
 export default function EditProfile({ route }) {
   const userName = route.params.userName;
@@ -67,6 +67,32 @@ export default function EditProfile({ route }) {
     }
   };
 
+  const UpdateName = async () => {
+    if (Name.length < 3) {
+      ToastAndroid.show(
+        "Name must be atleast 3 characters",
+        ToastAndroid.SHORT
+      );
+    } else {
+      await updateUserName(Name)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.status === 200) {
+            console.log("Name updated");
+            ToastAndroid.show("Name updated", ToastAndroid.SHORT);
+          }
+          if (res.data.status === 500) {
+            console.log("Server error");
+            ToastAndroid.show("Server error", ToastAndroid.SHORT);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          ToastAndroid.show("Server error", ToastAndroid.SHORT);
+        });
+    }
+  };
+
   return (
     <View
       style={{ flex: 1, backgroundColor: "white", justifyContent: "center" }}
@@ -112,6 +138,14 @@ export default function EditProfile({ route }) {
                 maxLength={50}
                 Icon={"user-o"}
               />
+              <View style={{ marginVertical: 10 }}>
+                <PrimaryButton
+                onPress={UpdateName}
+                  fontSize={16}
+                  filled={true}
+                  content={"Update Name"}
+                />
+              </View>
             </View>
 
             <View style={{ marginVertical: 10 }}>

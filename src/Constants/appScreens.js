@@ -23,6 +23,7 @@ import ProductScreen from "../screens/AppScreens/ProductScreen";
 import Referrals from "../screens/Profile/Referrals";
 import NotificationSettings from "../screens/OptionScreen/NotificationSettings";
 import EditProfile from "../screens/Profile/EditProfile";
+import Policies from "../screens/AppScreens/Policies";
 export const bottomTabScreens = {
   HomeScreen: {
     screen: AppStack,
@@ -44,6 +45,7 @@ export const bottomTabScreens = {
     screen: AccountScreen,
     name: "AccountScreen",
   },
+  
 };
 
 export const authStackScreens = {
@@ -93,6 +95,11 @@ export const appStackScreens = {
   ProductScreen: {
     screen: ProductScreen,
     name: "ProductScreen",
+  },
+  
+  Policies :{
+    screen: Policies,
+    name: "Policies",
   },
   NotificationSettings: {
     screen: NotificationSettings,

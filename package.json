@@ -46,6 +46,7 @@
     "react-native-screens": "^3.18.2",
     "react-native-skeleton-placeholder": "^5.2.4",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-webview": "^11.26.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

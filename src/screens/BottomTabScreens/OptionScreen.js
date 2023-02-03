@@ -1,9 +1,10 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Linking } from "react-native";
 import React from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import ScreenHeader from "../../Components/ScreenHeader";
 import PrimaryButton from "../../Components/PrimaryButton";
 import { useNavigation } from "@react-navigation/native";
+import { appStackScreens } from "../../Constants/appScreens";
 
 export default function OptionScreen() {
   const navigation = useNavigation();
@@ -32,6 +33,7 @@ export default function OptionScreen() {
               borderColor={COLORS.black}
               borderWidth={0.4}
               textColor={COLORS.black}
+              onPress={() => navigation.navigate(appStackScreens.Policies.name)}
               content={"Terms & Conditions"}
               icon={"file-alt"}
               fontSize={14}
@@ -41,6 +43,7 @@ export default function OptionScreen() {
           </View>
           <View style={{ marginVertical: 10 }}>
             <PrimaryButton
+              onPress={() => navigation.navigate(appStackScreens.Policies.name)}
               borderRadius={5}
               borderColor={COLORS.black}
               borderWidth={0.4}
@@ -54,6 +57,7 @@ export default function OptionScreen() {
           </View>
           <View style={{ marginVertical: 10 }}>
             <PrimaryButton
+              onPress={() => navigation.navigate(appStackScreens.Policies.name)}
               borderRadius={5}
               borderColor={COLORS.black}
               borderWidth={0.4}
@@ -71,6 +75,9 @@ export default function OptionScreen() {
               content={"Contact Us"}
               icon={"phone-alt"}
               fontSize={14}
+              onPress={() => {
+                Linking.openURL("tel:1234567890");
+              }}
               textAlign={"left"}
               buttonHeight={50}
               borderColor={COLORS.black}
@@ -94,7 +101,6 @@ export default function OptionScreen() {
           <View style={{ marginVertical: 10 }}>
             <PrimaryButton
               borderRadius={5}
-             
               content={"Share App"}
               icon={"share-alt"}
               fontSize={14}

@@ -11,12 +11,20 @@ export function userLogin(phoneNumber) {
   return axiosClient.post("/Login", { phoneNumber: phoneNumber });
 }
 
+export async function updateUserName(UserName) {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/updateName", {
+    UserId: UserId,
+    Name: UserName,
+  });
+}
+
 export async function updateProfilePicture(profilePic) {
   const UserId = await AsyncStorage.getItem("UserId");
   return axiosClient.post("/updateProfilePic", {
     UserId: UserId,
 
-    profilePicture: profilePic,
+    Profile_Picture: profilePic,
   });
 }
 
