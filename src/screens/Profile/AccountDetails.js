@@ -142,25 +142,16 @@ export default function AccountDetails() {
                 content={"Edit Profile"}
                 icon={"user-edit"}
                 fontSize={14}
+                onPress={() => {
+                  navigation.navigate(authStackScreens.EditProfile.name);
+                }}
                 borderRadius={4}
                 buttonHeight={50}
                 borderWidth={0.4}
               />
             </View>
 
-            {/* <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
-              <PrimaryButton
-                borderColor={COLORS.black}
-                textColor={COLORS.black}
-                borderWidth={0.4}
-                textAlign={"left"}
-                content={"Wallet"}
-                icon={"wallet"}
-                fontSize={14}
-                borderRadius={4}
-                buttonHeight={50}
-              />
-            </View> */}
+     
             <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
               <PrimaryButton
                 borderColor={COLORS.black}
@@ -177,19 +168,7 @@ export default function AccountDetails() {
                 borderWidth={0.4}
               />
             </View>
-            {/* <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
-              <PrimaryButton
-                borderColor={COLORS.black}
-                textColor={COLORS.black}
-                textAlign={"left"}
-                content={"Returns & Refunds"}
-                icon={"undo-alt"}
-                fontSize={14}
-                borderRadius={4}
-                buttonHeight={50}
-                borderWidth={0.4}
-              />
-            </View> */}
+           
             <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
               <PrimaryButton
                 borderColor={COLORS.black}

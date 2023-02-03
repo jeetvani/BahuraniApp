@@ -22,6 +22,7 @@ import Coupons from "../screens/Profile/Coupons";
 import ProductScreen from "../screens/AppScreens/ProductScreen";
 import Referrals from "../screens/Profile/Referrals";
 import NotificationSettings from "../screens/OptionScreen/NotificationSettings";
+import EditProfile from "../screens/Profile/EditProfile";
 export const bottomTabScreens = {
   HomeScreen: {
     screen: AppStack,
@@ -53,6 +54,10 @@ export const authStackScreens = {
   Referrals: {
     screen: Referrals,
     name: "Referrals",
+  },
+  EditProfile: {
+    name: "EditProfile",
+    screen: EditProfile,
   },
   OTPInput: {
     screen: OTPInput,
