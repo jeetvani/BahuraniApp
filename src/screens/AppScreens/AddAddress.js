@@ -47,7 +47,9 @@ export default function AddAddress({ route }) {
       City == "" ||
       State == "" ||
       Street == "" ||
-      Pincode == ""
+      Pincode == ""||
+      Landmark==""||
+      HouseNumber==""
     ) {
       alert("Please fill all the fields");
     } else {

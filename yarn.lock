@@ -6411,6 +6411,11 @@ react-native-linear-gradient@^2.6.2:
   resolved "https://registry.yarnpkg.com/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz#56598a76832724b2afa7889747635b5c80948f38"
   integrity sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ==
 
+react-native-otp-box@^1.0.24:
+  version "1.0.24"
+  resolved "https://registry.yarnpkg.com/react-native-otp-box/-/react-native-otp-box-1.0.24.tgz#e33537852208ca0399c52b270a1e7e6b739e7cb8"
+  integrity sha512-4m4JSI8zsnF3ZcaDjcQmVqvV8H8kBAWd3yiDUiavq9+6d3o9nf7gmFdVzU5j2UuMezNuP9Zjow+lRwuzlVL30g==
+
 react-native-otp-textinput@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-otp-textinput/-/react-native-otp-textinput-1.0.0.tgz#2f50be01e17b0acf5c69736b2f1adb6adb8bf055"

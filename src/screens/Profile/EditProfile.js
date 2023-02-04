@@ -265,6 +265,7 @@ export default function EditProfile({ route }) {
           <View style={{ marginHorizontal: 20 }}>
             <View style={{ marginVertical: 10 }}>
               <FormInput
+              
                 value={Name}
                 placeholder={"Name"}
                 onchangeText={(text) => {
@@ -277,6 +278,7 @@ export default function EditProfile({ route }) {
                 <PrimaryButton
                   onPress={UpdateName}
                   fontSize={16}
+                  borderRadius={5}
                   filled={true}
                   content={"Update Name"}
                 />
@@ -288,6 +290,7 @@ export default function EditProfile({ route }) {
                 value={PhoneNumber}
                 keyBoardType={"number-pad"}
                 placeholder={"Phone Number"}
+                
                 onchangeText={(text) => setPhoneNumber(text)}
                 Icon={"phone"}
               />
@@ -295,6 +298,7 @@ export default function EditProfile({ route }) {
             <View style={{ marginVertical: 10 }}>
               <PrimaryButton
                 fontSize={16}
+                borderRadius={5}
                 filled={true}
                 isLoading={updatingPhoneNumber}
                 onPress={updatePhoneNumber}

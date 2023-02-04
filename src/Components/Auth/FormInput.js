@@ -8,13 +8,13 @@ export default function FormInput({
   onchangeText,
   keyBoardType,
   placeholder,
-  value
+  value,
 }) {
   return (
     <View
       style={{
-        borderColor: COLORS.primary,
-        borderWidth: 1,
+        borderColor: COLORS.black,
+        borderWidth: 0.4,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
@@ -32,14 +32,12 @@ export default function FormInput({
       <TextInput
         onChangeText={onchangeText}
         maxLength={maxLength}
-        value={value?value:null}
+        value={value ? value : null}
         placeholder={placeholder}
         keyboardType={keyBoardType}
         style={{
           flex: 1,
-
           paddingTop: 10,
-
           paddingBottom: 10,
           paddingLeft: 0,
           backgroundColor: "#fff",

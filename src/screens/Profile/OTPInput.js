@@ -85,7 +85,14 @@ export default function OTPInput({ route }) {
           </Text>
         </Text>
       </View>
-      <View style={{ paddingTop: 0, flex: 1, flexDirection: "row" }}>
+      <View
+        style={{
+          paddingTop: 0,
+          flex: 1,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
         <OTPTextInput
           ref={(e) => (otpInput = e)}
           handleTextChange={(text) => setOtp(text)}

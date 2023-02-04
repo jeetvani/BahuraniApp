@@ -30,7 +30,7 @@ export default function PrimaryButton({
         style={{
           alignItems: isLoading ? "center" : null,
           height: buttonHeight ? buttonHeight : 34,
-          borderRadius: borderRadius ? borderRadius : null,
+          borderRadius: borderRadius ? borderRadius : 8,
           justifyContent: "center",
           backgroundColor: filled ? COLORS.primary : COLORS.white,
           borderWidth: borderWidth ? borderWidth : 1.5,

@@ -160,7 +160,7 @@ export default function FinalizeOrder({ route }) {
                     borderRadius: 5,
                     borderColor:
                       SelectedAddress == item.Address_Id
-                        ? COLORS.primary
+                        ? COLORS.black
                         : COLORS.black,
                   }}
                 >
@@ -190,7 +190,7 @@ export default function FinalizeOrder({ route }) {
                         fontWeight: "bold",
                         color:
                           SelectedAddress == item.Address_Id
-                            ? COLORS.primary
+                            ? COLORS.black
                             : COLORS.black,
                       }}
                     >
@@ -202,7 +202,7 @@ export default function FinalizeOrder({ route }) {
                         fontWeight: "bold",
                         color:
                           SelectedAddress == item.Address_Id
-                            ? COLORS.primary
+                            ? COLORS.black
                             : COLORS.black,
                       }}
                     >
@@ -214,7 +214,7 @@ export default function FinalizeOrder({ route }) {
 
                         color:
                           SelectedAddress == item.Address_Id
-                            ? COLORS.primary
+                            ? COLORS.black
                             : COLORS.black,
                       }}
                     >
@@ -224,7 +224,7 @@ export default function FinalizeOrder({ route }) {
                       style={{
                         color:
                           SelectedAddress == item.Address_Id
-                            ? COLORS.primary
+                            ? COLORS.black
                             : COLORS.black,
                       }}
                     >

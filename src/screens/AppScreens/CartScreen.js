@@ -36,7 +36,6 @@ export default function CartScreen() {
   const navigation = useNavigation();
 
   const getCartData = async () => {
-    setIsLoading(true);
     checkAuth().then(async (response) => {
       if (response) {
         console.log("User logged in");
@@ -57,6 +56,7 @@ export default function CartScreen() {
 
         await getPreferableProducts()
           .then((res) => {
+            setPreferredProducts([])
             console.log(res.data);
             setPreferredProducts(res.data.PreferableProducts);
           })

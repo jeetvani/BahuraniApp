@@ -13,7 +13,13 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import checkAuth from "../../functions/checkAuth";
-import { addToCartAPI, checkProductInCartAPI, decreaseProductQuantityAPI, deleteProductFromCartAPI, increaseProductQuantityAPI } from "../../API/lib/product";
+import {
+  addToCartAPI,
+  checkProductInCartAPI,
+  decreaseProductQuantityAPI,
+  deleteProductFromCartAPI,
+  increaseProductQuantityAPI,
+} from "../../API/lib/product";
 export default function ProductCard({
   img,
   title,
@@ -34,7 +40,6 @@ export default function ProductCard({
   });
 
   useEffect(() => {
-
     checkProductInCart();
   }, []);
 
@@ -57,13 +62,11 @@ export default function ProductCard({
           if (route.name == "CartMain") {
             addToCartFunction();
           }
-     
         }
       })
       .catch((err) => {
         ToastAndroid.show(err.message, ToastAndroid.SHORT);
         setProcessRunning(false);
-
       });
   };
 
@@ -82,14 +85,12 @@ export default function ProductCard({
             if (route.name == "CartMain") {
               addToCartFunction();
             }
-       
           }
         })
         .catch((err) => {
           setProcessRunning(false);
           ToastAndroid.show(err.message, ToastAndroid.SHORT);
         });
-
     }
     if (quantity == 1) {
       await deleteProductFromCartAPI({
@@ -105,7 +106,6 @@ export default function ProductCard({
             if (route.name == "CartMain") {
               addToCartFunction();
             }
-       
           } else {
             setProcessRunning(false);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -249,7 +249,7 @@ export default function ProductCard({
                     </Text>
                   </View>
                   <TouchableOpacity
-                  disabled={ProcessRunning}
+                    disabled={ProcessRunning}
                     onPress={IncreaseProductQuantity}
                     style={{
                       flex: 1,
@@ -273,8 +273,8 @@ export default function ProductCard({
                 onPress={addToCart}
                 style={styles.addToCartButtonContainer}
               >
-                <Text style={{ color: COLORS.primary, fontWeight: "bold" }}>
-                  <Ionicons name="add" size={18} />
+                <Text style={{paddingVertical:3 }} >
+                  <Ionicons name="add" color={COLORS.primary} size={18} />
                 </Text>
               </TouchableOpacity>
             )}

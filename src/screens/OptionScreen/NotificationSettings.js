@@ -17,7 +17,7 @@ export default function NotificationSettings() {
             marginTop: 10,
             flexDirection: "row",
             borderWidth: 0.4,
-            borderColor: COLORS.primary,
+            borderColor: COLORS.black,
             padding: 10,
             borderRadius: 5,
             marginVertical:10
@@ -46,7 +46,7 @@ export default function NotificationSettings() {
             marginTop: 10,
             flexDirection: "row",
             borderWidth: 0.4,
-            borderColor: COLORS.primary,
+            borderColor: COLORS.black,
             padding: 10,
             borderRadius: 5,
             marginVertical:10
@@ -75,7 +75,7 @@ export default function NotificationSettings() {
             marginTop: 10,
             flexDirection: "row",
             borderWidth: 0.4,
-            borderColor: COLORS.primary,
+            borderColor: COLORS.black,
             padding: 10,
             borderRadius: 5,
             marginVertical:10

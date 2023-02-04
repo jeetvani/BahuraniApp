@@ -33,7 +33,15 @@ export default function UserRegistrationForm({ route }) {
   const [HouseNo, setHouseNo] = useState("");
   const registerUser = async () => {
     //check if all fields are filled
-    if (Name == "" || PinCode == "") {
+    if (
+      Name == "" ||
+      PinCode == "" ||
+      City == "" ||
+      State == "" ||
+      Landmark == "" ||
+      Street == "" ||
+      HouseNo == ""
+    ) {
       alert("Please fill all the fields");
       return;
     } else {
