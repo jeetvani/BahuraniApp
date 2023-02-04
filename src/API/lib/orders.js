@@ -10,8 +10,9 @@ export async function getOrdersAPI() {
   axiosClient
     .post("/getUserOrders", { UserId: UserId })
     .then((res) => {
-      console.log(res.data);
-      return res.data;
+      const OrderData = res.data.OrderData;
+      console.log(OrderData[0].Order_Data);
+      return res.data.OrderData;
     })
     .catch((err) => {
       {

@@ -26,9 +26,7 @@ import {
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
 import checkAuth from "../../functions/checkAuth";
-import {
-  bottomTabScreens,
-} from "../../Constants/appScreens";
+import { bottomTabScreens } from "../../Constants/appScreens";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
   const ProductId = route.params.ProductId;
@@ -40,6 +38,7 @@ export default function ProductDetails({ route }) {
   const [ProductName, setProductName] = useState("");
   const [SelectedVariant, setSelectedVariant] = useState();
   const [ProductDescription, setProductDescription] = useState("");
+  const [CategoryName, setCategoryName] = useState("");
   const [Variants, setVariants] = useState([]);
   const [ProductImages, setProductImages] = useState([]);
   const IncreaseProductQuantity = () => {
@@ -117,28 +116,29 @@ export default function ProductDetails({ route }) {
       setSelectedVariant(res.data[0].Variants[0]);
       setProductDescription(res.data[0].ProductDescription);
       setProductImages(res.data[0].ProductImages);
+      setCategoryName(res.data[0].Category);
 
-      await getPreferableProducts().then((res) => {
+      await getPreferableProducts().then(async (res) => {
         setPrefferableProducts(res.data.PreferableProducts);
+
+        await checkAuth().then((res) => {
+          if (res) {
+            checkProductInCartAPI(ProductId)
+              .then((response) => {
+                console.log(response.data);
+                if (response.data.status == 100) {
+                  setIsExitsInCart(true);
+                  setQuantity(response.data.quantity);
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        });
+        setisLoading(false);
       });
     });
-
-    await checkAuth().then((res) => {
-      if (res) {
-        checkProductInCartAPI(ProductId)
-          .then((response) => {
-            console.log(response.data);
-            if (response.data.status == 100) {
-              setIsExitsInCart(true);
-              setQuantity(response.data.quantity);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-    setisLoading(false);
 
     return unsubscribe;
   });
@@ -260,10 +260,90 @@ export default function ProductDetails({ route }) {
               </Text>
             ) : null}
             <View style={{ marginTop: 20 }}>
-              <HomeScreenLayout
-                leftText={"Frequently Bought Together"}
-                rightText={"View All"}
-              />
+              <View style={{ flexDirection: "row" }}>
+                <View
+                  style={{
+                    flex: 3,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: COLORS.primary,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    More From{" "}
+                  </Text>
+                  <Text style={{ fontSize: 13 }}>{CategoryName}</Text>
+                </View>
+                <View
+                  style={{
+                    flex: 2,
+                  }}
+                >
+                  {IsExitsInCart ? (
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        borderWidth: 1,
+                        borderColor: COLORS.primary,
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={DecreaseProductQuantity}
+                        style={{
+                          flex: 1,
+                          alignItems: "center",
+                          paddingVertical: 5,
+                          borderRightWidth: 1,
+                          borderColor: COLORS.primary,
+                        }}
+                      >
+                        <FontAwesome
+                          name="minus"
+                          color={COLORS.primary}
+                          size={18}
+                        />
+                      </TouchableOpacity>
+                      <View style={{ flex: 4, alignItems: "center" }}>
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            color: COLORS.primary,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <Text>{Quantity}</Text>
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        onPress={IncreaseProductQuantity}
+                        style={{
+                          flex: 1,
+                          alignItems: "center",
+                          paddingVertical: 5,
+                          borderLeftWidth: 1,
+                          borderColor: COLORS.primary,
+                        }}
+                      >
+                        <FontAwesome
+                          name="plus"
+                          color={COLORS.primary}
+                          size={18}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <PrimaryButton
+                      onPress={addToCart}
+                      filled
+                      content={"Add to Cart"}
+                      fontSize={14}
+                    />
+                  )}
+                </View>
+              </View>
               <View style={{ marginVertical: 5 }}>
                 <FlatList
                   horizontal
@@ -293,7 +373,7 @@ export default function ProductDetails({ route }) {
           <ActivityIndicator size={30} color={COLORS.primary} />
         </View>
       )}
-      {isLoading ? null : (
+      {/* {isLoading ? null : (
         <View
           style={{
             marginHorizontal: 20,
@@ -302,62 +382,9 @@ export default function ProductDetails({ route }) {
             backgroundColor: COLORS.white,
           }}
         >
-          <View style={{ flex: 1, marginHorizontal: 10 }}>
-            {IsExitsInCart ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                  borderWidth: 1,
-                  borderColor: COLORS.primary,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={DecreaseProductQuantity}
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    paddingVertical: 5,
-                    borderRightWidth: 1,
-                    borderColor: COLORS.primary,
-                  }}
-                >
-                  <FontAwesome name="minus" color={COLORS.primary} size={18} />
-                </TouchableOpacity>
-                <View style={{ flex: 4, alignItems: "center" }}>
-                  <Text
-                    style={{
-                      fontSize: 18,
-                      color: COLORS.primary,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <Text>{Quantity}</Text>
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={IncreaseProductQuantity}
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    paddingVertical: 5,
-                    borderLeftWidth: 1,
-                    borderColor: COLORS.primary,
-                  }}
-                >
-                  <FontAwesome name="plus" color={COLORS.primary} size={18} />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <PrimaryButton
-                onPress={addToCart}
-                filled
-                content={"Add to Cart"}
-                fontSize={14}
-              />
-            )}
-          </View>
+          <View style={{ flex: 1, marginHorizontal: 10 }}></View>
         </View>
-      )}
+      )} */}
     </View>
   );
 }

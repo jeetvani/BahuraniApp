@@ -34,7 +34,6 @@ export default function CartProduct({
       .then(async (response) => {
         console.log(response.data);
         if (response.data.status == 200) {
-          setQuantity(parseInt(Quantity) + 1);
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
           setProcessRunning(false);
           functionQuantityChange();
@@ -49,13 +48,13 @@ export default function CartProduct({
   const DecreaseProductQuantity = async () => {
     setProcessRunning(true);
     if (Quantity > 1) {
+      
       await decreaseProductQuantityAPI({
         ProductId: ProductId,
       })
         .then(async (response) => {
           console.log(response.data);
           if (response.data.status == 200) {
-            setQuantity(parseInt(Quantity) - 1);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
             functionQuantityChange();

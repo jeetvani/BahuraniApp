@@ -1,10 +1,30 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useState } from "react";
+import { View, ActivityIndicator, Platform, StyleSheet } from "react-native";
+import { WebView } from "react-native-webview";
 
-export default function Policies() {
+function Policies(props) {
+  const INJECTEDJAVASCRIPT = ``;
+  const ActivityIndicatorLoadingView = () => {
+    return <ActivityIndicator size="large" />;
+  };
   return (
-    <View>
-      <Text>Policies</Text>
+    <View style={Styles.container}>
+      <WebView
+        allowsFullscreenVideo={true}
+        allowsInlineMediaPlayback={true}
+        javaScriptEnabled={true}
+        injectedJavaScript={INJECTEDJAVASCRIPT}
+        scrollEnabled
+        source={{ uri: "https://bahurani.online/privacy-policy/" }}
+      />
     </View>
-  )
+  );
 }
+const Styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    marginTop: Platform.OS == "ios" ? 35 : 10,
+  },
+});
+export default Policies;

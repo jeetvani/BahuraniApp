@@ -27,6 +27,7 @@ export async function increaseProductQuantityAPI(productObj) {
 }
 export async function decreaseProductQuantityAPI(productObj) {
   const UserId = await AsyncStorage.getItem("UserId");
+  console.log(`Decreasing Quantity of ${productObj.ProductId} `);
   return axiosClient.post("/decreaseProductQuantity", {
     ProductId: productObj.ProductId,
     UserId: UserId,

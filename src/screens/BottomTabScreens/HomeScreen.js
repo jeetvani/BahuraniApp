@@ -57,7 +57,9 @@ export default function HomeScreen() {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 15 }}>
-          <Banner />
+          <Banner 
+          navigation={navigation}
+          />
         </View>
         <View style={{ marginTop: 15, marginHorizontal: 20 }}>
           <HomeScreenLayout
@@ -147,7 +149,7 @@ export default function HomeScreen() {
                     });
                   }}
                 >
-                  <View>
+                  <View style={{alignItems:'center'}}>
                     <Image source={{ uri: item.CategoryImage }} width={75} height={75} />
                     <Text
                       numberOfLines={2}
@@ -155,8 +157,8 @@ export default function HomeScreen() {
                         paddingVertical: 4,
                         fontWeight: "bold",
                         width: 80,
+                        fontSize: 12, 
                         textAlign: "center",
-                        fontSize: 12,
                       }}
                     >
                       {item.CategoryName}

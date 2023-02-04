@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import ScreenHeader from "../../Components/ScreenHeader";
 import * as Data from "../../Constants/fakeData";
@@ -22,7 +22,7 @@ export default function Orders({ route }) {
   const [OrderData, setOrderData] = useState([]);
   const getUserOrders = async () => {
     getOrdersAPI().then((response) => {
-      console.log(response);
+      
     });
   };
 
@@ -37,7 +37,6 @@ export default function Orders({ route }) {
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScreenHeader backButton heading={"Your Orders"} />
-      <ScrollView showsVerticalScrollIndicator={false}>
         {isLoading ? (
           <View
             style={{
@@ -158,7 +157,6 @@ export default function Orders({ route }) {
             </View>
           </View>
         )}
-      </ScrollView>
     </View>
   );
 }

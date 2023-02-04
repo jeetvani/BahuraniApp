@@ -35,13 +35,15 @@ export default class Banner extends React.Component {
           img: "https://miro.medium.com/max/680/1*t8ZaGUP8uXuTTsWuiKNdyA.gif",
         },
       ],
-    }; 
+    };
   }
   _onViewableItemsChanged = ({ viewableItems, changed }) => {
     // console.log("====================================");
-   // console.log(viewableItems[0]);
+    // console.log(viewableItems[0]);
     // console.log("====================================");
-    const activeIndex =viewableItems[0].item?viewableItems[0].item.BannerId:1;
+    const activeIndex = viewableItems[0].item
+      ? viewableItems[0].item.BannerId
+      : 1;
 
     this.setState({ activeIndex }, () => {
       //  console.log("Active Index", this.state.activeIndex);
@@ -52,7 +54,13 @@ export default class Banner extends React.Component {
     const renderItem = ({ item, index }) => {
       return (
         <View style={{ alignItems: "center" }}>
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              this.props.navigation.navigate("BannerZoom", {
+                imgSrc: item.img,
+              });
+            }}
+          >
             <Image
               borderRadius={8}
               width={Dimensions.get("screen").width * 0.8}
@@ -90,7 +98,7 @@ export default class Banner extends React.Component {
                   width: 10,
                   borderRadius: 5,
                   backgroundColor:
-                   this.state.activeIndex === item.BannerId
+                    this.state.activeIndex === item.BannerId
                       ? COLORS.primary
                       : COLORS.gray,
                   marginHorizontal: 2,

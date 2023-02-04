@@ -43,91 +43,95 @@ export default function FinalizeOrder({ route }) {
     return unsubscribe;
   });
   const proceedToPayment = async () => {
-    setProcessing(true);
-    const UserId = await AsyncStorage.getItem("UserId");
-    console.log(UserId, Address, PaymentMethod);
-    await axiosClient
-      .post("/CheckOutCart", {
-        UserId: UserId,
-        Address: JSON.stringify(Address),
-        PaymentMethod:
-          PaymentMethod == 1 ? "Cash On Delivery" : "Online Payment",
-      })
-      .then((res) => {
-        console.log(res.data);
-        const data = res.data;
-        if (data.status == 200) {
-          console.log(`Creating Order ${data.order_id}}`);
+    if (!SelectedAddress || !PaymentMethod) {
+      alert("Please Select Address and Payment Method");
+    } else {
+      setProcessing(true);
+      const UserId = await AsyncStorage.getItem("UserId");
+      console.log(UserId, Address, PaymentMethod);
+      await axiosClient
+        .post("/CheckOutCart", {
+          UserId: UserId,
+          Address: JSON.stringify(Address),
+          PaymentMethod:
+            PaymentMethod == 1 ? "Cash On Delivery" : "Online Payment",
+        })
+        .then((res) => {
+          console.log(res.data);
+          const data = res.data;
+          if (data.status == 200) {
+            console.log(`Creating Order ${data.order_id}}`);
 
-          var options = {
-            description: `Payment for Order ${data.order_id}}`,
-            image: "https://i.ibb.co/hyvbSRh/Logo.jpg",
-            currency: "INR",
-            key: "rzp_test_EJQQA3DkmlB0p9",
-            amount: data.amount,
-            name: "Bahurani Brand",
-            order_id: data.order_id,
-            prefill: {
-              email: "bahuranitech@gmail.com",
-              contact: "9191919191",
-              name: "Gaurav Kumar",
-            },
-            theme: { color: COLORS.primary },
-            readonly: {
-              contact: true,
-              email: true,
-            },
-          };
+            var options = {
+              description: `Payment for Order ${data.order_id}}`,
+              image: "https://i.ibb.co/hyvbSRh/Logo.jpg",
+              currency: "INR",
+              key: "rzp_test_EJQQA3DkmlB0p9",
+              amount: data.amount,
+              name: "Bahurani Brand",
+              order_id: data.order_id,
+              prefill: {
+                email: "bahuranitech@gmail.com",
+                contact: "9191919191",
+                name: "Gaurav Kumar",
+              },
+              theme: { color: COLORS.primary },
+              readonly: {
+                contact: true,
+                email: true,
+              },
+            };
 
-          if (data.PaymentMethod == "Cash On Delivery") {
-            navigation.navigate(appStackScreens.OrderSuccess.name, {
-              saved: saved,
-            });
-          } else {
-            RazorpayCheckout.open(options)
-              .then((data) => {
-                const order_id = data.razorpay_order_id;
-                const payment_id = data.razorpay_payment_id;
-                return axiosClient
-                  .post("/verifyPayment", {
-                    order_id: order_id,
-                    payment_id: payment_id,
-                  })
-                  .then((res) => {
-                    console.log(res.data);
-                    if (res.data.status == 200) {
-                      navigation.navigate(appStackScreens.OrderSuccess.name,{
-                        saved: saved,
-                      });
-                      return {
-                        status: 200,
-                        message: "Order Placed Successfully",
-                      };
-                    } else {
-                      ToastAndroid.show("Payment Failed", ToastAndroid.SHORT);
-                      navigation.navigate(appStackScreens.CartScreen.name);
-                      return {
-                        status: 400,
-                        message: "Payment Failed",
-                      };
-                    }
-                  });
-              })
-              .catch((error) => {
-                console.log(error);
-                // handle failure
-                ToastAndroid.show("Payment Failed", ToastAndroid.SHORT);
+            if (data.PaymentMethod == "Cash On Delivery") {
+              navigation.navigate(appStackScreens.OrderSuccess.name, {
+                saved: saved,
               });
+            } else {
+              RazorpayCheckout.open(options)
+                .then((data) => {
+                  const order_id = data.razorpay_order_id;
+                  const payment_id = data.razorpay_payment_id;
+                  return axiosClient
+                    .post("/verifyPayment", {
+                      order_id: order_id,
+                      payment_id: payment_id,
+                    })
+                    .then((res) => {
+                      console.log(res.data);
+                      if (res.data.status == 200) {
+                        navigation.navigate(appStackScreens.OrderSuccess.name, {
+                          saved: saved,
+                        });
+                        return {
+                          status: 200,
+                          message: "Order Placed Successfully",
+                        };
+                      } else {
+                        ToastAndroid.show("Payment Failed", ToastAndroid.SHORT);
+                        navigation.navigate(appStackScreens.CartScreen.name);
+                        return {
+                          status: 400,
+                          message: "Payment Failed",
+                        };
+                      }
+                    });
+                })
+                .catch((error) => {
+                  console.log(error);
+                  // handle failure
+                  ToastAndroid.show("Payment Failed", ToastAndroid.SHORT);
+                });
+            }
           }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        ToastAndroid.show("Something Went Wrong", ToastAndroid.SHORT);
-      })
-      .finally(() => {
-        setProcessing(false);
-      });
+        })
+        .catch((error) => {
+          console.log(error);
+          ToastAndroid.show("Something Went Wrong", ToastAndroid.SHORT);
+        })
+        .finally(() => {
+          setProcessing(false);
+        });
+    }
   };
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>

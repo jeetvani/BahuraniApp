@@ -13,7 +13,7 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import checkAuth from "../../functions/checkAuth";
-import { addToCartAPI, checkProductInCartAPI } from "../../API/lib/product";
+import { addToCartAPI, checkProductInCartAPI, decreaseProductQuantityAPI, deleteProductFromCartAPI, increaseProductQuantityAPI } from "../../API/lib/product";
 export default function ProductCard({
   img,
   title,
@@ -27,18 +27,86 @@ export default function ProductCard({
   addToCartFunction,
 }) {
   const navigation = useNavigation();
- 
-  useEffect(() => {
+
+  const unsubscribe = navigation.addListener("focus", () => {
     checkProductInCart();
-  }, [navigation]);
-  const [isInCart, setIsInCart] = React.useState(true);
+    return unsubscribe;
+  });
+
+  useEffect(() => {
+
+    checkProductInCart();
+  }, []);
+
+  const [isInCart, setIsInCart] = React.useState(false);
   const [quantity, setQuantity] = React.useState(1);
+  const [ProcessRunning, setProcessRunning] = React.useState(false);
   const route = useRoute();
 
+  const IncreaseProductQuantity = async () => {
+    setProcessRunning(true);
+    await increaseProductQuantityAPI({
+      ProductId: ProductId,
+    })
+      .then(async (response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          setProcessRunning(false);
+          checkProductInCart();
+        }
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        setProcessRunning(false);
+      });
+  };
+
+  const DecreaseProductQuantity = async () => {
+    setProcessRunning(true);
+    if (quantity > 1) {
+      await decreaseProductQuantityAPI({
+        ProductId: ProductId,
+      })
+        .then(async (response) => {
+          console.log(response.data);
+          if (response.data.status == 200) {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            checkProductInCart();
+            setProcessRunning(false);
+
+          }
+        })
+        .catch((err) => {
+          setProcessRunning(false);
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
+
+    }
+    if (quantity == 1) {
+      await deleteProductFromCartAPI({
+        ProductId: ProductId,
+      })
+        .then(async (response) => {
+          console.log(response.data);
+
+          if (response.data.status == 200) {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            setProcessRunning(false);
+            checkProductInCart();
+          } else {
+            setProcessRunning(false);
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          }
+        })
+        .catch((err) => {
+          setProcessRunning(false);
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
+    }
+  };
+
   const checkProductInCart = () => {
-    //check if product is in cart
-    //if yes then return true
-    //else return false
     checkAuth().then((res) => {
       if (res) {
         checkProductInCartAPI(ProductId).then((res) => {
@@ -137,22 +205,55 @@ export default function ProductCard({
           <View style={{ flex: 3, alignItems: "flex-end" }}>
             {isInCart ? (
               <View style={styles.counter}>
-                <View style={{flexDirection:'row'}}>
-<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
-<Text>
-  <FontAwesome name="minus" color={COLORS.primary} size={10} />
-</Text>
-</View>
-<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
-<Text>
-  <Text style={{color:COLORS.primary}}>{quantity}</Text>
-</Text>
-</View>
-<View style={{flex:1,justifyContent:'center',alignItems:'center',padding:5}}>
-<Text><FontAwesome name="plus" color={COLORS.primary} size={10} />
-</Text>
-</View>
-
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    onPress={DecreaseProductQuantity}
+                    disabled={ProcessRunning}
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 5,
+                    }}
+                  >
+                    <Text>
+                      <FontAwesome
+                        name="minus"
+                        color={COLORS.primary}
+                        size={10}
+                      />
+                    </Text>
+                  </TouchableOpacity>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 5,
+                    }}
+                  >
+                    <Text>
+                      <Text style={{ color: COLORS.primary }}>{quantity}</Text>
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                  disabled={ProcessRunning}
+                    onPress={IncreaseProductQuantity}
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 5,
+                    }}
+                  >
+                    <Text>
+                      <FontAwesome
+                        name="plus"
+                        color={COLORS.primary}
+                        size={10}
+                      />
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             ) : (
@@ -217,7 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: COLORS.white,
   },
-  counter:{
+  counter: {
     backgroundColor: COLORS.black,
     elevation: 2,
     shadowColor: COLORS.black,
@@ -228,9 +329,8 @@ const styles = StyleSheet.create({
     width: 60,
     justifyContent: "center",
     borderColor: COLORS.gray,
-    left:10,
+    left: 10,
     borderRadius: 8,
     backgroundColor: COLORS.white,
- 
-  }
+  },
 });

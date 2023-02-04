@@ -157,7 +157,7 @@ export default function EditProfile({ route }) {
               />
             </View>
             <View style={{ marginVertical: 10 }}>
-              <PrimaryButton fontSize={16} filled={true} content={"Register"} />
+              <PrimaryButton fontSize={16} filled={true} content={"Update PhoneNumber"} />
             </View>
             <View></View>
           </View>

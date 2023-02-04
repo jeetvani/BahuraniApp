@@ -7,6 +7,7 @@ import {
   createStackNavigator,
 } from "@react-navigation/stack";
 import { appStackScreens, authStackScreens } from "../Constants/appScreens";
+import BannerZoom from "../screens/AppScreens/BannerZoom";
 
 export default function RootNavigation() {
   const stack = createStackNavigator();
@@ -27,6 +28,10 @@ export default function RootNavigation() {
         <stack.Screen
           name={"CartMain"}
           component={appStackScreens.CartScreen.screen}
+        />
+           <stack.Screen
+          name={"BannerZoom"}
+          component={BannerZoom}
         />
           <stack.Screen
         name={appStackScreens.NotificationSettings.name}
