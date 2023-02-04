@@ -1,12 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import React, { useState } from "react";
 
-import { appImages } from "../../Constants/appImages";
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../Constants/res/COLORS";
 import Image from "react-native-scalable-image";
-import PrimaryButton from "../PrimaryButton";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { appStackScreens } from "../../Constants/appScreens";
 export default function WishlistCard({

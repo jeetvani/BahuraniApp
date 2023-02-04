@@ -3,10 +3,8 @@ import React from "react";
 import Image from "react-native-scalable-image";
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 
-import { useNavigation } from "@react-navigation/native";
 
 import { COLORS } from "../../Constants/res/COLORS";
-import SearchBar from "../SearchBar";
 
 export default function ProfileHeader({
   userName,

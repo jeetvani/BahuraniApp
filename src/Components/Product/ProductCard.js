@@ -54,11 +54,16 @@ export default function ProductCard({
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
           setProcessRunning(false);
           checkProductInCart();
+          if (route.name == "CartMain") {
+            addToCartFunction();
+          }
+     
         }
       })
       .catch((err) => {
         ToastAndroid.show(err.message, ToastAndroid.SHORT);
         setProcessRunning(false);
+
       });
   };
 
@@ -74,7 +79,10 @@ export default function ProductCard({
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             checkProductInCart();
             setProcessRunning(false);
-
+            if (route.name == "CartMain") {
+              addToCartFunction();
+            }
+       
           }
         })
         .catch((err) => {
@@ -94,6 +102,10 @@ export default function ProductCard({
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
             checkProductInCart();
+            if (route.name == "CartMain") {
+              addToCartFunction();
+            }
+       
           } else {
             setProcessRunning(false);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -182,7 +194,7 @@ export default function ProductCard({
           {variant}
         </Text>
         <View style={{ flexDirection: "row", marginTop: 4 }}>
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text
               style={{
                 textDecorationLine: "line-through",

@@ -7,10 +7,8 @@ import {
   TextInput,
 } from "react-native";
 import React from "react";
-import { appImages } from "../Constants/appImages";
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../Constants/res/COLORS";
-import SearchBar from "./SearchBar";
 import { useNavigation } from "@react-navigation/native";
 import { appStackScreens } from "../Constants/appScreens";
 export default function ScreenHeader({
@@ -70,7 +68,7 @@ export default function ScreenHeader({
                       }
                 }
                 style={styles.input}
-                placeholder="Search Bahurani Mart"
+                placeholder="Search Bahurani Brand"
                 onChangeText={onSearch ? onSearch : null}
                 underlineColorAndroid="transparent"
               />

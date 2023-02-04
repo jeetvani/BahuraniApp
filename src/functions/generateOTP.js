@@ -1,14 +1,14 @@
 import { firebase } from "@react-native-firebase/auth";
 
 const generateOTP = async (phoneNumber) => {
-  return new Promise((resolve, reject) => {
+  return new Promise(async(resolve, reject) => {
     if (phoneNumber.length < 10) {
       reject("Phone Number must be 10 digits long");
     } else {
       console.log("====================================");
       console.log("Generating OTP for: " + phoneNumber);
       console.log("====================================");
-      firebase
+     await firebase
         .auth()
         .verifyPhoneNumber(phoneNumber)
         .then((res) => {

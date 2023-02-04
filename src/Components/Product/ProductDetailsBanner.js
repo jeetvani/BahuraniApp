@@ -5,12 +5,10 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
 } from "react-native";
-import React, { useCallback, useState } from "react";
-import { ImageSlider } from "react-native-image-slider-banner";
+import React from "react";
 import Image from "react-native-scalable-image";
 import { COLORS } from "../../Constants/res/COLORS";
 import Carousel from "react-native-snap-carousel";
-import { FontAwesome } from "@expo/vector-icons";
 export default class ProductDetailsBanner extends React.Component {
   constructor(props) {
     const Images = props.Images;

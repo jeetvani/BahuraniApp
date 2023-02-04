@@ -2,8 +2,7 @@ import RazorpayCheckout from "react-native-razorpay";
 import axiosClient from "../axiosClient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS } from "../../Constants/res/COLORS";
-import { useNavigation } from "@react-navigation/native";
-import { appStackScreens } from "../../Constants/appScreens";
+
 
 export async function getOrdersAPI() {
   const UserId = await AsyncStorage.getItem("UserId");

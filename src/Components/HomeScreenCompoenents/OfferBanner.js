@@ -1,8 +1,7 @@
 import { View, Text, FlatList, Dimensions, TouchableWithoutFeedback } from "react-native";
 import React, { useCallback, useState } from "react";
-import { ImageSlider } from "react-native-image-slider-banner";
 import Image from "react-native-scalable-image";
-import { COLORS } from "../../Constants/res/COLORS";
+
 import Carousel from "react-native-snap-carousel";
 
 export default function OfferBanner() {
@@ -26,7 +25,9 @@ export default function OfferBanner() {
   const renderItem = ({ item, index }) => {
     return (
       <View style={{ alignItems: "center" }}>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback 
+          
+        >
           <Image
           borderRadius={8}
             width={Dimensions.get("screen").width * 0.8}

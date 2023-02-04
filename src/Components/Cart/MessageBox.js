@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Dimensions, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import Image from "react-native-scalable-image";
 // import MessageStatus from "./MessageStatus";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";

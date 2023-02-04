@@ -39,6 +39,7 @@
     "react-native-image-slider-banner": "^1.0.3",
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-linear-gradient": "^2.6.2",
+    "react-native-otp-textinput": "^1.0.0",
     "react-native-push-notification": "^8.1.1",
     "react-native-ratings": "^8.1.0",
     "react-native-razorpay": "^2.3.0",

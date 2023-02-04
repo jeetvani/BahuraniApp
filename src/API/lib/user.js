@@ -28,6 +28,14 @@ export async function updateProfilePicture(profilePic) {
   });
 }
 
+export async function updatePhoneNumberAPI(phoneNumber) {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/updatePhoneNumber", {
+    UserId: UserId,
+    PhoneNumber: phoneNumber,
+  });
+} 
+
 export function userRegister(userObj) {
   return axiosClient.post("/signUp", {
     name: userObj.name,

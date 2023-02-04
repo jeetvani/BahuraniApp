@@ -26,10 +26,11 @@ import {
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
 import checkAuth from "../../functions/checkAuth";
-import { bottomTabScreens } from "../../Constants/appScreens";
+import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
   const ProductId = route.params.ProductId;
+
   const [Quantity, setQuantity] = useState(1);
   const [PrefferableProducts, setPrefferableProducts] = useState([]);
   const [Expanded, setExpanded] = useState(false);
@@ -39,6 +40,7 @@ export default function ProductDetails({ route }) {
   const [SelectedVariant, setSelectedVariant] = useState();
   const [ProductDescription, setProductDescription] = useState("");
   const [CategoryName, setCategoryName] = useState("");
+  const [CategoryId, setCategoryId] = useState("");
   const [Variants, setVariants] = useState([]);
   const [ProductImages, setProductImages] = useState([]);
   const IncreaseProductQuantity = () => {
@@ -117,6 +119,7 @@ export default function ProductDetails({ route }) {
       setProductDescription(res.data[0].ProductDescription);
       setProductImages(res.data[0].ProductImages);
       setCategoryName(res.data[0].Category);
+      setCategoryId(res.data[0].CategoryId);
 
       await getPreferableProducts().then(async (res) => {
         setPrefferableProducts(res.data.PreferableProducts);
@@ -260,90 +263,10 @@ export default function ProductDetails({ route }) {
               </Text>
             ) : null}
             <View style={{ marginTop: 20 }}>
-              <View style={{ flexDirection: "row" }}>
-                <View
-                  style={{
-                    flex: 3,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: COLORS.primary,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    More From{" "}
-                  </Text>
-                  <Text style={{ fontSize: 13 }}>{CategoryName}</Text>
-                </View>
-                <View
-                  style={{
-                    flex: 2,
-                  }}
-                >
-                  {IsExitsInCart ? (
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        borderWidth: 1,
-                        borderColor: COLORS.primary,
-                      }}
-                    >
-                      <TouchableOpacity
-                        onPress={DecreaseProductQuantity}
-                        style={{
-                          flex: 1,
-                          alignItems: "center",
-                          paddingVertical: 5,
-                          borderRightWidth: 1,
-                          borderColor: COLORS.primary,
-                        }}
-                      >
-                        <FontAwesome
-                          name="minus"
-                          color={COLORS.primary}
-                          size={18}
-                        />
-                      </TouchableOpacity>
-                      <View style={{ flex: 4, alignItems: "center" }}>
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            color: COLORS.primary,
-                            fontWeight: "bold",
-                          }}
-                        >
-                          <Text>{Quantity}</Text>
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        onPress={IncreaseProductQuantity}
-                        style={{
-                          flex: 1,
-                          alignItems: "center",
-                          paddingVertical: 5,
-                          borderLeftWidth: 1,
-                          borderColor: COLORS.primary,
-                        }}
-                      >
-                        <FontAwesome
-                          name="plus"
-                          color={COLORS.primary}
-                          size={18}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <PrimaryButton
-                      onPress={addToCart}
-                      filled
-                      content={"Add to Cart"}
-                      fontSize={14}
-                    />
-                  )}
-                </View>
-              </View>
+              <HomeScreenLayout
+                leftText={"Frequently Bought Together"}
+                rightText={"View All"}
+              />
               <View style={{ marginVertical: 5 }}>
                 <FlatList
                   horizontal
@@ -385,6 +308,109 @@ export default function ProductDetails({ route }) {
           <View style={{ flex: 1, marginHorizontal: 10 }}></View>
         </View>
       )} */}
+      <View
+        style={{
+          flexDirection: "row",
+          marginHorizontal: 20,
+          paddingVertical: 5,
+        }}
+      >
+        <TouchableOpacity
+
+onPress={() => {
+  navigation.navigate(appStackScreens.ProductScreen.name, {
+    CategoryId:CategoryId ,
+    CategoryName: CategoryName,
+  });
+}}
+
+          style={{
+            flex: 3,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 15,
+              color: COLORS.black,
+              fontWeight: "bold",
+            }}
+          >
+            More From{" "}
+          </Text>
+          <Text style={{ fontSize: 13, color: COLORS.primary }}>
+            {CategoryName}
+          </Text>
+        </TouchableOpacity>
+        <View
+          style={{
+            flex: 2,
+          }}
+        >
+          {IsExitsInCart ? (
+            <View
+              style={{
+                flexDirection: "row",
+                borderWidth: 0.4,
+                borderColor: COLORS.black,
+              }}
+            >
+              <TouchableOpacity
+                onPress={DecreaseProductQuantity}
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  paddingVertical: 5,
+                  borderRightWidth: 0.4,
+                  borderColor: COLORS.black,
+                  justifyContent: "center",
+                  paddingHorizontal: 5,
+                }}
+              >
+                <FontAwesome name="minus" color={COLORS.primary} size={14} />
+              </TouchableOpacity>
+              <View
+                style={{
+                  flex: 4,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: COLORS.primary,
+                    fontWeight: "bold",
+                  }}
+                >
+                  <Text>{Quantity}</Text>
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={IncreaseProductQuantity}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 5,
+                  borderLeftWidth: 0.4,
+                  borderColor: COLORS.black,
+                  paddingHorizontal: 5,
+                }}
+              >
+                <FontAwesome name="plus" color={COLORS.primary} size={14} />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <PrimaryButton
+              borderRadius={5}
+              onPress={addToCart}
+              filled
+              content={"Add to Cart"}
+              fontSize={14}
+            />
+          )}
+        </View>
+      </View>
     </View>
   );
 }

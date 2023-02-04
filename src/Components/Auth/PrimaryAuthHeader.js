@@ -2,7 +2,7 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 
 import { COLORS } from "../../Constants/res/COLORS";
-import { appImages } from "../../Constants/appImages";
+
 
 export default function PrimaryAuthHeader({
   headText,

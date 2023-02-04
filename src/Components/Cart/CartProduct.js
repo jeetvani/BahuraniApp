@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, ToastAndroid } from "react-native";
 import React, { useState } from "react";
 
-import { appImages } from "../../Constants/appImages";
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../Constants/res/COLORS";
 import Image from "react-native-scalable-image";
@@ -10,8 +9,6 @@ import {
   deleteProductFromCartAPI,
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
-import { useNavigation, NavigationAction } from "@react-navigation/native";
-import { appStackScreens } from "../../Constants/appScreens";
 export default function CartProduct({
   ImgSrc,
   Name,
@@ -22,7 +19,6 @@ export default function CartProduct({
   ProductQuantity,
   functionQuantityChange,
 }) {
-  const navigation = useNavigation();
   const [Quantity, setQuantity] = useState(ProductQuantity);
   const [processRunning, setProcessRunning] = useState(false);
 

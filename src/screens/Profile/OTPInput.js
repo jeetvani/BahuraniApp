@@ -1,5 +1,5 @@
 import { View, Text, TextInput, Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
 import PrimaryButton from "../../Components/PrimaryButton";
@@ -10,7 +10,7 @@ import { checkPhoneNumber, userLogin } from "../../API/lib/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { authStackScreens } from "../../Constants/appScreens";
-
+import OTPTextInput from "react-native-otp-textinput";
 export default function OTPInput({ route }) {
   const navigation = useNavigation();
   const verificationId = route.params.verificationId;
@@ -48,6 +48,15 @@ export default function OTPInput({ route }) {
         setIsLoading(false);
       });
   }
+  let otpInput = useRef(null);
+
+  const clearText = () => {
+    otpInput.current.clear();
+  };
+
+  const setText = () => {
+    otpInput.current.setValue("1234");
+  };
   return (
     <View
       style={{
@@ -77,26 +86,12 @@ export default function OTPInput({ route }) {
         </Text>
       </View>
       <View style={{ paddingTop: 0, flex: 1, flexDirection: "row" }}>
-        <InputBlocks />
-        <InputBlocks />
-        <InputBlocks />
-        <InputBlocks />
-        <InputBlocks />
-        <InputBlocks />
-        <TextInput
-          keyboardType="number-pad"
-          value={otp}
-          onChangeText={(text) => setOtp(text)}
-          style={{
-            position: "absolute",
-            fontSize: 24,
-            top: 8,
-            left: 5,
-            letterSpacing: 37,
-            width: 600,
-          }}
-          maxLength={6}
-        />
+        <OTPTextInput
+          ref={(e) => (otpInput = e)}
+          handleTextChange={(text) => setOtp(text)}
+          inputCount={6}
+          tintColor={COLORS.primary}
+        ></OTPTextInput>
       </View>
       <View style={{ paddingBottom: 30, flex: 1, justifyContent: "flex-end" }}>
         <PrimaryButton

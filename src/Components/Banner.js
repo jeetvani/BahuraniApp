@@ -2,9 +2,7 @@ import { View, Text, FlatList, Dimensions } from "react-native";
 import React, { useCallback, useState } from "react";
 import { COLORS } from "../Constants/res/COLORS";
 import Image from "react-native-scalable-image";
-import { ImageSlider } from "react-native-image-slider-banner";
 import Carousel from "react-native-snap-carousel";
-import ImageModal from "react-native-image-modal";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { getBanners } from "../API/lib/banners";
 export default class Banner extends React.Component {

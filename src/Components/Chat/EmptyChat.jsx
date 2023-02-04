@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import Image from "react-native-scalable-image";
 import { appImages } from "../../Constants/appImages";
-import PrimaryAuthHeader from "../Auth/PrimaryAuthHeader";
+
 // import { Container } from './styles';
 
 const EmptyChat = ({ Faculty, Name }) => {
