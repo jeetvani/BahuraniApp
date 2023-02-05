@@ -5,10 +5,20 @@ export function getProducts() {
   return axiosClient.get("/GetProducts");
 }
 export function checkPhoneNumber(phoneNumber) {
-  return axiosClient.post("/checkPhoneNumber", { phoneNumber: phoneNumber });
+  return axiosClient.post("/checkPhoneNumber", { PhoneNumber: phoneNumber });
 }
 export function userLogin(phoneNumber) {
   return axiosClient.post("/Login", { phoneNumber: phoneNumber });
+}
+
+export async function getAllCouponsAPI() {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/getAllCoupons", { UserId: UserId });
+}
+
+export async function getWishlistDataAPI() {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/getWishlist", { UserId: UserId });
 }
 
 export async function updateUserName(UserName) {
@@ -34,7 +44,7 @@ export async function updatePhoneNumberAPI(phoneNumber) {
     UserId: UserId,
     PhoneNumber: phoneNumber,
   });
-} 
+}
 
 export function userRegister(userObj) {
   return axiosClient.post("/signUp", {
@@ -44,6 +54,14 @@ export function userRegister(userObj) {
     referCode: userObj.referCode,
     address: userObj.address,
     PinCode: userObj.PinCode,
+  });
+}
+
+export async function addToWishlistAPI(ProductId) {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/addToWishlist", {
+    UserId: UserId,
+    ProductId: ProductId,
   });
 }
 

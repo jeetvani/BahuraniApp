@@ -16,24 +16,35 @@ import { COLORS } from "../../Constants/res/COLORS";
 import ScreenHeader from "../../Components/ScreenHeader";
 import CartProduct from "../../Components/Cart/CartProduct";
 import PrimaryButton from "../../Components/PrimaryButton";
-import { fakeCategoryData } from "../../Constants/fakeData";
+import { CouponData, fakeCategoryData } from "../../Constants/fakeData";
 import HomeScreenLayout from "../../Components/HomeScreenCompoenents/HomeScreenLayout";
 import ProductCard from "../../Components/Product/ProductCard";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import checkAuth from "../../functions/checkAuth";
-import { getCartDataAPI } from "../../API/lib/user";
+import { getAllCouponsAPI, getCartDataAPI } from "../../API/lib/user";
 import { getPreferableProducts } from "../../API/lib/product";
 import AnimatedLottieView from "lottie-react-native";
 import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
+import DraggablePanel from "react-native-draggable-panel";
 export default function CartScreen() {
   const [mrpTotal, setMrpTotal] = useState(0);
   const [saved, setSaved] = useState(0);
   const [total, setTotal] = useState(0);
+  const [AppliedCoupon, setAppliedCoupon] = useState(null);
   const [PreferredProducts, setPreferredProducts] = useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [Data, setData] = useState([]);
+  const [Coupons, setCoupons] = useState([]);
+  const [OfferPanel, setOfferPanel] = useState(false);
   const navigation = useNavigation();
+
+  const getCoupons = () => {
+    getAllCouponsAPI().then((res) => {
+      console.log(res.data);
+      setCoupons(res.data);
+    });
+  };
 
   const getCartData = async () => {
     checkAuth().then(async (response) => {
@@ -56,7 +67,7 @@ export default function CartScreen() {
 
         await getPreferableProducts()
           .then((res) => {
-            setPreferredProducts([])
+            setPreferredProducts([]);
             console.log(res.data);
             setPreferredProducts(res.data.PreferableProducts);
           })
@@ -74,6 +85,7 @@ export default function CartScreen() {
 
   const unsubscribe = navigation.addListener("focus", async () => {
     getCartData();
+    getCoupons();
     return unsubscribe;
   });
 
@@ -85,6 +97,77 @@ export default function CartScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.gray }}>
+      <DraggablePanel
+        visible={OfferPanel}
+        closeOnTouchOutside={true}
+        onRequestClose={() => setOfferPanel(false)}
+        height={Dimensions.get("window").height - 100}
+        containerStyle={{ backgroundColor: COLORS.white }}
+        onDismiss={() => setOfferPanel(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+          <FlatList
+            data={Coupons}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+              onPress={() => {
+                setAppliedCoupon(item.CouponId);
+                setOfferPanel(false);
+              }}
+                style={{
+                  marginVertical: 5,
+                  marginHorizontal: 10,
+                  flexDirection: "row",
+                  padding: 10,
+                  borderWidth: 0.4,
+                  borderRadius:5
+                }}
+              >
+                <View
+                  style={{
+                    flex: 2,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.CouponId}
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontSize: 14,
+
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.Description}
+
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                  }}
+                ></View>
+              </TouchableOpacity>
+            )}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          ></View>
+        </View>
+      </DraggablePanel>
       <ScreenHeader
         heading=" My Cart"
         cart={true}
@@ -133,6 +216,9 @@ export default function CartScreen() {
               <HomeScreenLayout
                 leftText={"Apply Coupon"}
                 rightText={"View All"}
+                onPress={() => {
+                  setOfferPanel(true);
+                }}
               />
               <View>
                 <TextInput
@@ -366,14 +452,14 @@ export default function CartScreen() {
             style={{
               flex: 1,
               justifyContent: "center",
-          
+
               backgroundColor: COLORS.white,
             }}
           >
             <AnimatedLottieView
               source={require("../../../assets/emptycart.json")}
               autoPlay
-              style={{height:Dimensions.get("screen").height*0.60}}
+              style={{ height: Dimensions.get("screen").height * 0.6 }}
               loop={false}
             />
             <View
@@ -382,10 +468,9 @@ export default function CartScreen() {
                 top: Dimensions.get("screen").height * 0.003,
               }}
             >
-            <PrimaryAuthHeader headText={"Your Cart is Empty"} />
-           
+              <PrimaryAuthHeader headText={"Your Cart is Empty"} />
+
               <PrimaryButton
-              
                 onPress={() => {
                   navigation.navigate("Bottomtab");
                 }}

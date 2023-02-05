@@ -64,3 +64,11 @@ export async function checkProductInCartAPI(ProductId) {
 export function getPreferableProducts() {
   return axiosClient.post("/getPreferableProducts");
 }
+
+export async function checkProductInWishlistAPI(ProductId) {
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/checkProductExitsInWishlist", {
+    ProductId: ProductId,
+    UserId: UserId,
+  });
+}

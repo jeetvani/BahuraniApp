@@ -1,29 +1,99 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, ToastAndroid } from "react-native";
 import React, { useState } from "react";
 
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../Constants/res/COLORS";
 import Image from "react-native-scalable-image";
-import { useNavigation } from "@react-navigation/native";
-import { appStackScreens } from "../../Constants/appScreens";
+import { increaseProductQuantityAPI } from "../../API/lib/product";
+
 export default function WishlistCard({
   ImgSrc,
   Name,
   OurPrice,
   MRP,
   Variant,
-  itemInCart,
+  ProductId,
+  ProductQuantity,
+  functionQuantityChange,
+  ItemInCart,
 }) {
-  const [Quantity, setQuantity] = useState(1);
-  const navigation = useNavigation();
+  const [Quantity, setQuantity] = useState(ProductQuantity);
+  const [processRunning, setProcessRunning] = useState(false);
+
+  const IncreaseProductQuantity = async () => {
+    setProcessRunning(true);
+    await increaseProductQuantityAPI({
+      ProductId: ProductId,
+    })
+      .then(async (response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          setProcessRunning(false);
+          setQuantity(parseInt(Quantity) + 1);
+        //  functionQuantityChange();
+        }
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        setProcessRunning(false);
+      });
+  };
+
+  const DecreaseProductQuantity = async () => {
+    setProcessRunning(true);
+    if (Quantity > 1) {
+      await decreaseProductQuantityAPI({
+        ProductId: ProductId,
+      })
+        .then(async (response) => {
+          console.log(response.data);
+          if (response.data.status == 200) {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            setProcessRunning(false);
+            setQuantity(parseInt(Quantity) - 1);
+       //     functionQuantityChange();
+          }
+        })
+        .catch((err) => {
+          setProcessRunning(false);
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
+    }
+    if (Quantity == 1) {
+      await deleteProductFromCartAPI({
+        ProductId: ProductId,
+      })
+        .then(async (response) => {
+          console.log(response.data);
+
+          if (response.data.status == 200) {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            setProcessRunning(false);
+            //refresh cart screen
+        //    functionQuantityChange();
+          } else {
+            setProcessRunning(false);
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          }
+        })
+        .catch((err) => {
+          setProcessRunning(false);
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        });
+    }
+  };
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View
+      style={{
+        flexDirection: "row",
+        borderBottomWidth: 0.4,
+        paddingVertical: 10,
+      }}
+    >
       <View style={{ flex: 2 }}>
         <Image
-          onPress={() => {
-            navigation.navigate(appStackScreens.ProductDetails.name);
-          }}
-          width={100}
+          height={100}
           source={{
             uri: ImgSrc,
           }}
@@ -33,13 +103,17 @@ export default function WishlistCard({
         <Text numberOfLines={1} style={{ fontSize: 14, fontWeight: "bold" }}>
           {Name}
         </Text>
-        <Text numberOfLines={1} style={{ fontSize: 12, paddingVertical: 3 }}>
+        <Text
+          numberOfLines={1}
+          style={{ fontSize: 13, paddingVertical: 5, color: "#959191" }}
+        >
           {Variant}
         </Text>
         <View style={{ paddingVertical: 5, flexDirection: "row" }}>
           <View style={{ flex: 1 }}>
             <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-              ₹{OurPrice * Quantity}{" "}
+              ₹ {ItemInCart ? OurPrice * Quantity : OurPrice}
+              {"  "}
               <Text
                 style={{
                   fontWeight: "bold",
@@ -49,7 +123,7 @@ export default function WishlistCard({
                   color: "#B0A7A7",
                 }}
               >
-                ₹{MRP * Quantity}
+                ₹ {ItemInCart ? MRP * Quantity : MRP}
               </Text>
               <Text
                 style={{
@@ -59,116 +133,73 @@ export default function WishlistCard({
                   paddingHorizontal: 3,
                 }}
               >
-                {" "}
-                {(MRP - OurPrice) * Quantity} off
+                {"  "}
+                {ItemInCart ? (MRP - OurPrice) * Quantity : OurPrice} off
               </Text>
             </Text>
           </View>
         </View>
       </View>
-      <View
-        style={{
-          flex: 1.5,
-          justifyContent: "flex-end",
-          bottom: 15,
-          right: 10,
-          alignItems: "center",
-        }}
-      >
-        {itemInCart ? (
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <Text
+      <View style={{ flex: 2, justifyContent: "flex-end", bottom: 15 }}>
+        <View style={{ flexDirection: "row" }}>
+          {ItemInCart ? (
+            <>
+              <TouchableOpacity
+                disabled={processRunning}
+                onPress={DecreaseProductQuantity}
                 style={{
+                  flex: 1,
+                  borderRadius: 3,
                   backgroundColor: COLORS.primary,
-                  fontSize: 16,
                   paddingHorizontal: 3,
-                  paddingVertical: 1,
-                  color: COLORS.white,
-                  textAlign: "center",
-                }}
-                onPress={() => {
-                  Quantity <= 1 ? setQuantity(1) : setQuantity(Quantity - 1);
+                  paddingVertical: 8,
+                  justifyContent: "center",
                 }}
               >
-                -
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 16, textAlign: "center" }}>
-                {Quantity}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text
+                <Text
+                  style={{
+                    fontSize: 14,
+
+                    color: COLORS.white,
+                    textAlign: "center",
+                  }}
+                >
+                  <FontAwesome name="minus" size={12} />
+                </Text>
+              </TouchableOpacity>
+              <View style={{ flex: 1, justifyContent: "center" }}>
+                <Text style={{ fontSize: 17, textAlign: "center" }}>
+                  {Quantity}
+                </Text>
+              </View>
+              <TouchableOpacity
+                disabled={processRunning}
+                onPress={IncreaseProductQuantity}
                 style={{
+                  flex: 1,
+                  borderRadius: 3,
                   backgroundColor: COLORS.primary,
-                  fontSize: 16,
                   paddingHorizontal: 3,
-                  paddingVertical: 1,
-                  color: COLORS.white,
-                  textAlign: "center",
-                }}
-                onPress={() => {
-                  setQuantity(Quantity + 1);
+                  paddingVertical: 8,
+                  justifyContent: "center",
                 }}
               >
-                +
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <View style={styles.addToCartButtonContainer}>
-                <TouchableOpacity>
-                  <Text
-                    style={{
-                      color: COLORS.primary,
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    <FontAwesome name="cart-plus" size={20} />
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={{ flex: 1, alignItems: "flex-end" }}>
-              <View style={styles.addToCartButtonContainer}>
-                <TouchableOpacity>
-                  <Text
-                    style={{
-                      color: COLORS.primary,
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}
-                  >
-                    <FontAwesome name="trash" size={20} />
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        )}
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: COLORS.white,
+                    textAlign: "center",
+                  }}
+                >
+                  <FontAwesome name="plus" size={12} />
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <TouchableOpacity></TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  addToCartButtonContainer: {
-    backgroundColor: COLORS.black,
-    elevation: 2,
-    shadowColor: COLORS.black,
-    shadowOffset: { width: 2, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    paddingVertical: 3,
-    width: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: COLORS.gray,
-    borderRadius: 8,
-    backgroundColor: COLORS.white,
-  },
-});

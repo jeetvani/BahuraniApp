@@ -3,22 +3,9 @@ import axiosClient from "../axiosClient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { COLORS } from "../../Constants/res/COLORS";
 
-
 export async function getOrdersAPI() {
   const UserId = await AsyncStorage.getItem("UserId");
-  axiosClient
-    .post("/getUserOrders", { UserId: UserId })
-    .then((res) => {
-      const OrderData = res.data.OrderData;
-      console.log(OrderData[0].Order_Data);
-      return res.data.OrderData;
-    })
-    .catch((err) => {
-      {
-        console.log(err);
-        return err;
-      }
-    });
+  return axiosClient.post("/getUserOrders", { UserId: UserId });
 }
 export async function createOrder(orderObj) {
   const userId = await AsyncStorage.getItem("userId");

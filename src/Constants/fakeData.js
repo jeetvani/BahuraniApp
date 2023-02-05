@@ -3,14 +3,14 @@ export var CouponData = [
     id: 1,
     couponCode: "FIRSTORDER",
     value: "10%",
-    description: "Get 10% off on your first order",
+    description: "Get \u20B9 off on your first order",
     status: "Active",
   },
   {
     id: 2,
-    couponCode: "MAGIC10",
-    value: "30%",
-    description: "Get 30% off on your  order",
+    couponCode: "MAGIC100",
+    value: "",
+    description: "Get \u20B9 100 off on your  order",
     status: "Active",
   },
   {

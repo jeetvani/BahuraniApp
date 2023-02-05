@@ -32,7 +32,7 @@ export default function CartProduct({
         if (response.data.status == 200) {
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
           setProcessRunning(false);
-          setQuantity(Quantity+1)
+          setQuantity(parseInt(Quantity) + 1);
           functionQuantityChange();
         }
       })
@@ -45,7 +45,6 @@ export default function CartProduct({
   const DecreaseProductQuantity = async () => {
     setProcessRunning(true);
     if (Quantity > 1) {
-      
       await decreaseProductQuantityAPI({
         ProductId: ProductId,
       })
@@ -54,7 +53,7 @@ export default function CartProduct({
           if (response.data.status == 200) {
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
-            setQuantity(Quantity-1)
+            setQuantity(parseInt(Quantity) - 1);
             functionQuantityChange();
           }
         })

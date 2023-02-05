@@ -14,23 +14,26 @@ import ProductDetailsBanner from "../../Components/Product/ProductDetailsBanner"
 import PrimaryButton from "../../Components/PrimaryButton";
 import ProductCard from "../../Components/Product/ProductCard";
 import HomeScreenLayout from "../../Components/HomeScreenCompoenents/HomeScreenLayout";
-import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import {
   addToCartAPI,
   checkProductInCartAPI,
+  checkProductInWishlistAPI,
   decreaseProductQuantityAPI,
   deleteProductFromCartAPI,
   getPreferableProducts,
   getProductById,
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
+//import icons
+import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
 import checkAuth from "../../functions/checkAuth";
 import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
+import { addToWishlistAPI } from "../../API/lib/user";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
   const ProductId = route.params.ProductId;
-
+  const [IsExistsInWishList, setIsExistsInWishList] = useState(false);
   const [Quantity, setQuantity] = useState(1);
   const [PrefferableProducts, setPrefferableProducts] = useState([]);
   const [Expanded, setExpanded] = useState(false);
@@ -136,15 +139,41 @@ export default function ProductDetails({ route }) {
               })
               .catch((err) => {
                 console.log(err);
+              })
+              .finally(() => {
+                checkProductInWishlistAPI(ProductId).then((response) => {
+                  console.log(response.data);
+                  if (response.data.status == 100) {
+                    setIsExistsInWishList(true);
+                  }
+                });
               });
           }
         });
+
         setisLoading(false);
       });
     });
 
     return unsubscribe;
   });
+
+  const addToWishList = async () => {
+    addToWishlistAPI(ProductId)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          setIsExistsInWishList(true);
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        }
+        if (response.data.status == 400) {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -163,6 +192,17 @@ export default function ProductDetails({ route }) {
                 color={COLORS.primary}
               />
             </Text>
+          </View>
+          <View
+            style={{ marginVertical: 10, alignItems: "flex-end", right: 30 }}
+          >
+            <TouchableOpacity onPress={addToWishList}>
+              <FontAwesome
+                name={IsExistsInWishList ? "heart" : "heart-o"}
+                size={25}
+                color={COLORS.primary}
+              />
+            </TouchableOpacity>
           </View>
           <ProductDetailsBanner Images={ProductImages} />
           <View style={{ marginHorizontal: 30 }}>
@@ -316,14 +356,12 @@ export default function ProductDetails({ route }) {
         }}
       >
         <TouchableOpacity
-
-onPress={() => {
-  navigation.navigate(appStackScreens.ProductScreen.name, {
-    CategoryId:CategoryId ,
-    CategoryName: CategoryName,
-  });
-}}
-
+          onPress={() => {
+            navigation.navigate(appStackScreens.ProductScreen.name, {
+              CategoryId: CategoryId,
+              CategoryName: CategoryName,
+            });
+          }}
           style={{
             flex: 3,
           }}

@@ -30,9 +30,6 @@ export default class ProductDetailsBanner extends React.Component {
   }
 
   _onViewableItemsChanged = async ({ viewableItems, changed }) => {
-    console.log("====================================");
-    console.log(viewableItems[0].item.id);
-    console.log("====================================");
     const activeIndex = viewableItems[0].item?viewableItems[0].item.id:1;
     this.setState({ activeIndex }, () => {
       // console.log("Banner Active Index", this.state.activeIndex);

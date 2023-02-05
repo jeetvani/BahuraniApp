@@ -1,4 +1,12 @@
-import { View, Text, ScrollView, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  StyleSheet,
+  ToastAndroid,
+  ActivityIndicator,
+} from "react-native";
 import React, { useLayoutEffect } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import ScreenHeader from "../../Components/ScreenHeader";
@@ -7,15 +15,23 @@ import WishlistCard from "../../Components/Wishlist/WishlistCard";
 import checkAuth from "../../functions/checkAuth";
 import { bottomTabScreens } from "../../Constants/appScreens";
 import { useNavigation } from "@react-navigation/native";
+import { getWishlistDataAPI } from "../../API/lib/user";
+import {
+  decreaseProductQuantityAPI,
+  increaseProductQuantityAPI,
+} from "../../API/lib/product";
 export default function Wishlist() {
   const [WishlistData, setWishlistData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const navigation = useNavigation();
 
   const getWishlistData = async () => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
+    getWishlistDataAPI().then((response) => {
+      if (response.data.status === 200) {
+        setWishlistData(response.data.Wishlist);
+        setIsLoading(false);
+      }
+    });
   };
 
   const unsubscribe = navigation.addListener("focus", () => {
@@ -39,7 +55,7 @@ export default function Wishlist() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>Loading...</Text>
+          <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
       ) : WishlistData.length === 0 ? (
         <View>
@@ -50,17 +66,26 @@ export default function Wishlist() {
           <View style={{ marginHorizontal: 20 }}>
             <View style={{ marginVertical: 5 }}>
               <FlatList
-                data={fakeCategoryData}
+                data={WishlistData}
                 showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                   <View style={styles.Container}>
                     <WishlistCard
-                      ImgSrc={item.image}
-                      MRP={item.mrp}
-                      OurPrice={item.ourPrice}
-                      Variant={item.numberOfItems}
-                      Name={item.name}
-                      itemInCart={item.itemInCart}
+                      functionQuantityChange={getWishlistData}
+                      ProductId={item.Product_Id}
+                      ImgSrc={item.Product_Status.Image}
+                      MRP={parseInt(item.Product_Status.Product_Variants.mrp)}
+                      ItemInCart={item.Product_Status.exitsInCart}
+                      ProductQuantity={
+                        item.Product_Status.exitsInCart
+                          ? parseInt(item.Product_Status.quantity)
+                          : 0
+                      }
+                      OurPrice={parseInt(
+                        item.Product_Status.Product_Variants.ourPrice
+                      )}
+                      Variant={item.Product_Status.Product_Variants.name}
+                      Name={item.Product_Status.name}
                     />
                   </View>
                 )}
@@ -77,18 +102,16 @@ export default function Wishlist() {
 const styles = StyleSheet.create({
   Container: {
     backgroundColor: COLORS.black,
-    marginVertical: 10,
-    elevation: 2,
+    // elevation: 3,
     alignItems: "center",
-    shadowColor: COLORS.primary,
-    shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 2,
-    shadowRadius: 3,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    borderColor: COLORS.primary,
+    // shadowColor: COLORS.black,
+    // shadowOffset: { width: -2, height: 4 },
+    // shadowOpacity: 2,
+    // shadowRadius: 3,
+
+    borderColor: COLORS.gray,
+    marginVertical: 10,
     borderRadius: 8,
     backgroundColor: COLORS.white,
-    marginHorizontal: 0,
   },
 });

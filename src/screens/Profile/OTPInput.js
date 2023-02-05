@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { authStackScreens } from "../../Constants/appScreens";
 import OTPTextInput from "react-native-otp-textinput";
+import OTPInputView from "react-native-otp-box";
 export default function OTPInput({ route }) {
   const navigation = useNavigation();
   const verificationId = route.params.verificationId;
@@ -42,7 +43,7 @@ export default function OTPInput({ route }) {
         });
       })
       .catch((err) => {
-        alert(err);
+        alert(`The OTP you entered is incorrect. Please try again.`);
       })
       .finally(() => {
         setIsLoading(false);
@@ -91,14 +92,34 @@ export default function OTPInput({ route }) {
           flex: 1,
           flexDirection: "row",
           alignItems: "center",
+          right: 10,
         }}
       >
-        <OTPTextInput
+        <OTPInputView
+        codeInputFieldStyle={{
+          width: 50,
+          height: 50,
+          borderTopWidth: 0,
+          borderLeftWidth: 0,
+          borderRightWidth: 0,
+        }}
+        codeInputHighlightStyle={{
+          borderColor: COLORS.primary,
+        }}
+          pinCount={6}
+          onCodeFilled={(code) => {
+            console.log(`Code is ${code}, you are good to go!`);
+            setOtp(code);
+          }}
+          code=""
+          autoFocusOnLoad={true}
+        ></OTPInputView>
+        {/* <OTPTextInput
           ref={(e) => (otpInput = e)}
           handleTextChange={(text) => setOtp(text)}
           inputCount={6}
           tintColor={COLORS.primary}
-        ></OTPTextInput>
+        ></OTPTextInput> */}
       </View>
       <View style={{ paddingBottom: 30, flex: 1, justifyContent: "flex-end" }}>
         <PrimaryButton

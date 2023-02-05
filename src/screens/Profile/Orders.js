@@ -22,6 +22,8 @@ export default function Orders({ route }) {
   const [OrderData, setOrderData] = useState([]);
   const getUserOrders = async () => {
     getOrdersAPI().then((response) => {
+      console.log(response.data.OrderData);
+      setOrderData(response.data.OrderData);
       
     });
   };
@@ -78,7 +80,7 @@ export default function Orders({ route }) {
                           color: COLORS.black,
                         }}
                       >
-                        {item.orderId}
+                        {item.Order_Id}
                       </Text>
                       <Text
                         style={{
@@ -87,7 +89,7 @@ export default function Orders({ route }) {
                           fontWeight: "bold",
                         }}
                       >
-                        {item.Product_Name}
+                        {item.Order_Data[0].ProductData.Product_Name}
                       </Text>
                       <Text
                         style={{
@@ -96,7 +98,7 @@ export default function Orders({ route }) {
                           color: COLORS.black,
                         }}
                       >
-                        {item.Address}
+                        {item.Address[0].Address}
                       </Text>
                       <Text
                         style={{
@@ -110,7 +112,7 @@ export default function Orders({ route }) {
                           color: COLORS.black,
                         }}
                       >
-                        {item.orderDate}
+                        {'1212'}
                       </Text>
                       <Text
                         style={{
@@ -133,7 +135,7 @@ export default function Orders({ route }) {
                         alignItems: "center",
                       }}
                     >
-                      <Image source={{ uri: item.image }} width={100} />
+                      <Image source={{ uri: 'sss' }} width={100} />
                       <View>
                         {item.orderStatus == "Delivered" ? (
                           <View>
