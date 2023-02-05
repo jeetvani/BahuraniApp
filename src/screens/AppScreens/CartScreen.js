@@ -39,17 +39,11 @@ export default function CartScreen() {
   const [OfferPanel, setOfferPanel] = useState(false);
   const navigation = useNavigation();
 
-  const getCoupons = () => {
-    getAllCouponsAPI().then((res) => {
-      console.log(res.data);
-      setCoupons(res.data);
-    });
-  };
+  const getCoupons = () => {};
 
   const getCartData = async () => {
     checkAuth().then(async (response) => {
       if (response) {
-        console.log("User logged in");
         await getCartDataAPI()
           .then(async (response) => {
             console.log("Cart Data", response.data.data);
@@ -59,24 +53,23 @@ export default function CartScreen() {
             setMrpTotal(response.data.mrpTotal);
             setSaved(response.data.saved);
             setTotal(response.data.total);
-          })
-          .catch((error) => {
-            console.log("Error", error);
-            ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
-          });
-
-        await getPreferableProducts()
-          .then((res) => {
-            setPreferredProducts([]);
-            console.log(res.data);
-            setPreferredProducts(res.data.PreferableProducts);
+            await getPreferableProducts()
+              .then((res) => {
+                setPreferredProducts([]);
+                console.log(res.data);
+                setPreferredProducts(res.data.PreferableProducts);
+                setIsLoading(false);
+              })
+              .catch((error) => {
+                console.log("Error", error);
+                ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
+              });
           })
           .catch((error) => {
             console.log("Error", error);
             ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
           });
       }
-      setIsLoading(false);
       if (!response) {
         navigation.navigate(bottomTabScreens.AccountScreen.name);
       }
@@ -84,8 +77,9 @@ export default function CartScreen() {
   };
 
   const unsubscribe = navigation.addListener("focus", async () => {
-    getCartData();
-    getCoupons();
+    getCartData().then(() => {
+      getCoupons();
+    });
     return unsubscribe;
   });
 
@@ -110,17 +104,17 @@ export default function CartScreen() {
             data={Coupons}
             renderItem={({ item }) => (
               <TouchableOpacity
-              onPress={() => {
-                setAppliedCoupon(item.CouponId);
-                setOfferPanel(false);
-              }}
+                onPress={() => {
+                  setAppliedCoupon(item.CouponId);
+                  setOfferPanel(false);
+                }}
                 style={{
                   marginVertical: 5,
                   marginHorizontal: 10,
                   flexDirection: "row",
                   padding: 10,
                   borderWidth: 0.4,
-                  borderRadius:5
+                  borderRadius: 5,
                 }}
               >
                 <View
@@ -147,7 +141,6 @@ export default function CartScreen() {
                     }}
                   >
                     {item.Description}
-
                   </Text>
                 </View>
                 <View

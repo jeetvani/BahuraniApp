@@ -1,10 +1,21 @@
-import { View, Text, TouchableOpacity, ToastAndroid } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ToastAndroid,
+  StyleSheet,
+} from "react-native";
 import React, { useState } from "react";
 
 import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../Constants/res/COLORS";
 import Image from "react-native-scalable-image";
-import { increaseProductQuantityAPI } from "../../API/lib/product";
+import {
+  addToCartAPI,
+  decreaseProductQuantityAPI,
+  deleteProductFromCartAPI,
+  increaseProductQuantityAPI,
+} from "../../API/lib/product";
 
 export default function WishlistCard({
   ImgSrc,
@@ -16,9 +27,27 @@ export default function WishlistCard({
   ProductQuantity,
   functionQuantityChange,
   ItemInCart,
+  VariantId
 }) {
   const [Quantity, setQuantity] = useState(ProductQuantity);
   const [processRunning, setProcessRunning] = useState(false);
+
+  const AddToCart = async (ProductId) => {
+    addToCartAPI({
+      ProductId: ProductId,
+      Quantity: 1,
+      VariantId: VariantId
+
+    }).then((response) => {
+      console.log(response.data);
+      if (response.data.status == 200) {
+        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+      }
+    }).catch((err) => {
+      ToastAndroid.show(err.message, ToastAndroid.SHORT);
+
+    });
+  };
 
   const IncreaseProductQuantity = async () => {
     setProcessRunning(true);
@@ -31,7 +60,7 @@ export default function WishlistCard({
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
           setProcessRunning(false);
           setQuantity(parseInt(Quantity) + 1);
-        //  functionQuantityChange();
+          //  functionQuantityChange();
         }
       })
       .catch((err) => {
@@ -52,7 +81,7 @@ export default function WishlistCard({
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
             setQuantity(parseInt(Quantity) - 1);
-       //     functionQuantityChange();
+            //     functionQuantityChange();
           }
         })
         .catch((err) => {
@@ -71,7 +100,7 @@ export default function WishlistCard({
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
             //refresh cart screen
-        //    functionQuantityChange();
+            //    functionQuantityChange();
           } else {
             setProcessRunning(false);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -196,10 +225,52 @@ export default function WishlistCard({
               </TouchableOpacity>
             </>
           ) : (
-            <TouchableOpacity></TouchableOpacity>
+            <>
+              <TouchableOpacity
+              onPress={()=>{
+                AddToCart(
+                  ProductId
+                );
+              }}
+                style={{
+                  flex: 1,
+                }}
+              >
+                <View style={styles.floatingButton}>
+                  <FontAwesome
+                    name="cart-plus"
+                    size={20}
+                    color={COLORS.primary}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ flex: 1 }}>
+                <View style={styles.floatingButton}>
+                  <FontAwesome name="trash" size={20} color={COLORS.primary} />
+                </View>
+              </TouchableOpacity>
+            </>
           )}
         </View>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  floatingButton: {
+    backgroundColor: COLORS.black,
+    elevation: 2,
+    shadowColor: COLORS.black,
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    paddingVertical: 3,
+    width: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: COLORS.gray,
+    borderRadius: 8,
+    backgroundColor: COLORS.white,
+  },
+});

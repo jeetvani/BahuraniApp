@@ -37,7 +37,6 @@ export default function Wishlist() {
   const unsubscribe = navigation.addListener("focus", () => {
     checkAuth().then((response) => {
       if (response) {
-        console.log("User logged in");
         getWishlistData();
       }
       if (!response) {
@@ -46,7 +45,7 @@ export default function Wishlist() {
     });
 
     return unsubscribe;
-  });
+  },[navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -73,6 +72,7 @@ export default function Wishlist() {
                     <WishlistCard
                       functionQuantityChange={getWishlistData}
                       ProductId={item.Product_Id}
+                      
                       ImgSrc={item.Product_Status.Image}
                       MRP={parseInt(item.Product_Status.Product_Variants.mrp)}
                       ItemInCart={item.Product_Status.exitsInCart}
@@ -86,6 +86,7 @@ export default function Wishlist() {
                       )}
                       Variant={item.Product_Status.Product_Variants.name}
                       Name={item.Product_Status.name}
+                      VariantId={item.Product_Status.Product_Variants.id}
                     />
                   </View>
                 )}

@@ -113,50 +113,57 @@ export default function ProductDetails({ route }) {
     });
   };
 
-  const unsubscribe = navigation.addListener("focus", async () => {
-    await getProductById(ProductId).then(async (res) => {
-      const ProductName = res.data[0].ProductName;
-      setProductName(ProductName);
-      setVariants(res.data[0].Variants);
-      setSelectedVariant(res.data[0].Variants[0]);
-      setProductDescription(res.data[0].ProductDescription);
-      setProductImages(res.data[0].ProductImages);
-      setCategoryName(res.data[0].Category);
-      setCategoryId(res.data[0].CategoryId);
+  const unsubscribe = navigation.addListener(
+    "focus",
+    async () => {
+      await getProductById(ProductId)
+        .then(async (res) => {
+          const ProductName = res.data[0].ProductName;
+          setProductName(ProductName);
+          setVariants(res.data[0].Variants);
+          setSelectedVariant(res.data[0].Variants[0]);
+          setProductDescription(res.data[0].ProductDescription);
+          setProductImages(res.data[0].ProductImages);
+          setCategoryName(res.data[0].Category);
+          setCategoryId(res.data[0].CategoryId);
+          await getPreferableProducts().then(async (res) => {
+            setPrefferableProducts(res.data.PreferableProducts);
 
-      await getPreferableProducts().then(async (res) => {
-        setPrefferableProducts(res.data.PreferableProducts);
-
-        await checkAuth().then((res) => {
-          if (res) {
-            checkProductInCartAPI(ProductId)
-              .then((response) => {
-                console.log(response.data);
-                if (response.data.status == 100) {
-                  setIsExitsInCart(true);
-                  setQuantity(response.data.quantity);
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-              })
-              .finally(() => {
-                checkProductInWishlistAPI(ProductId).then((response) => {
-                  console.log(response.data);
-                  if (response.data.status == 100) {
-                    setIsExistsInWishList(true);
-                  }
-                });
-              });
-          }
+            await checkAuth().then((res) => {
+              if (res) {
+                checkProductInCartAPI(ProductId)
+                  .then((response) => {
+                    console.log(response.data);
+                    if (response.data.status == 100) {
+                      setIsExitsInCart(true);
+                      setQuantity(response.data.quantity);
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  })
+                  .finally(() => {
+                    checkProductInWishlistAPI(ProductId).then((response) => {
+                      console.log(response.data);
+                      if (response.data.status == 100) {
+                        setIsExistsInWishList(true);
+                      }
+                    });
+                  });
+              }
+            });
+          });
+        })
+        .finally(() => {
+          setTimeout(() => {
+            setisLoading(false);
+          }, 500);
         });
 
-        setisLoading(false);
-      });
-    });
-
-    return unsubscribe;
-  });
+      return unsubscribe;
+    },
+    [navigation]
+  );
 
   const addToWishList = async () => {
     addToWishlistAPI(ProductId)
