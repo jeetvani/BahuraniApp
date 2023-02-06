@@ -1,7 +1,8 @@
 import { View, Text } from "react-native";
-import React from "react";
+import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import BottomTabNavigator from "./BottomTabNavigator";
+import 'react-native-gesture-handler'
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -20,7 +21,7 @@ export default function RootNavigation() {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       >
-        <stack.Screen name="Bottomtab" component={OTPInput} />
+        <stack.Screen name="Bottomtab" component={BottomTabNavigator} />
         <stack.Screen
           name={appStackScreens.OrderSuccess.name}
           component={appStackScreens.OrderSuccess.screen}

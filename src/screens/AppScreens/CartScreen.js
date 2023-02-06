@@ -27,11 +27,12 @@ import { getPreferableProducts } from "../../API/lib/product";
 import AnimatedLottieView from "lottie-react-native";
 import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
 import DraggablePanel from "react-native-draggable-panel";
+import axiosClient from "../../API/axiosClient";
 export default function CartScreen() {
   const [mrpTotal, setMrpTotal] = useState(0);
   const [saved, setSaved] = useState(0);
   const [total, setTotal] = useState(0);
-  const [AppliedCoupon, setAppliedCoupon] = useState(null);
+  const [AppliedCoupon, setAppliedCoupon] = useState('');
   const [PreferredProducts, setPreferredProducts] = useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [Data, setData] = useState([]);
@@ -39,7 +40,11 @@ export default function CartScreen() {
   const [OfferPanel, setOfferPanel] = useState(false);
   const navigation = useNavigation();
 
-  const getCoupons = () => {};
+  const getCoupons = () => {
+    getAllCouponsAPI().then((response) => {
+      setCoupons(response.data);
+    });
+  };
 
   const getCartData = async () => {
     checkAuth().then(async (response) => {
@@ -76,14 +81,15 @@ export default function CartScreen() {
     });
   };
 
-
   const [subs, setSubs] = React.useState([]);
   React.useEffect(() => {
     setSubs([
       navigation.addListener("focus", () => {
         checkAuth().then((response) => {
           if (response) {
-            getCartData();
+            getCartData().then(() => {
+              getCoupons();
+            });
           }
           if (!response) {
             navigation.navigate(bottomTabScreens.AccountScreen.name);
@@ -99,11 +105,11 @@ export default function CartScreen() {
     return () => unsubscribe();
   }, []);
 
-  
   const payment = () => {
     navigation.navigate(appStackScreens.FinalizeOrder.name, {
       amount: total,
       saved: saved,
+      CouponId: AppliedCoupon,
     });
   };
   return (
@@ -232,6 +238,9 @@ export default function CartScreen() {
               />
               <View>
                 <TextInput
+                  onChangeText={(text) => {
+                    setAppliedCoupon(text);
+                  }}
                   placeholder=" % Enter Coupon Code"
                   style={{
                     paddingVertical: 10,
@@ -241,6 +250,17 @@ export default function CartScreen() {
                   }}
                 />
                 <Text
+                  onPress={() => {
+                    axiosClient
+                      .post("/ValidateCoupon", {
+                        CouponId: AppliedCoupon,
+                      })
+                      .then((response) => {
+                        console.log("====================================");
+                        console.log(response.data);
+                        console.log("====================================");
+                      });
+                  }}
                   style={{
                     textAlign: "right",
                     bottom: 30,

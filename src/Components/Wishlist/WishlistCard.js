@@ -22,7 +22,7 @@ import {
 export default function WishlistCard({
   ImgSrc,
   Name,
-  OurPrice,
+  OurPrice, 
   MRP,
   Variant,
   ProductId,
@@ -34,7 +34,7 @@ export default function WishlistCard({
   const [Quantity, setQuantity] = useState(ProductQuantity);
   const [processRunning, setProcessRunning] = useState(false);
 
-  const AddToCart = async (ProductId) => {
+  const AddToCart = async () => {
     addToCartAPI({
       ProductId: ProductId,
       Quantity: 1,
@@ -53,7 +53,7 @@ export default function WishlistCard({
       });
   };
 
-  const removeFromWishlist = async (ProductId) => {
+  const removeFromWishlist = async () => {
     
     removeFromWishlistAPI(ProductId)
       .then((response) => {

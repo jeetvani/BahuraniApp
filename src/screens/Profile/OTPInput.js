@@ -12,10 +12,11 @@ import { useNavigation } from "@react-navigation/native";
 import { authStackScreens } from "../../Constants/appScreens";
 import OTPTextInput from "react-native-otp-textinput";
 import OTPInputView from "react-native-otp-box";
+import CodeInput from "react-native-confirmation-code-input";
 export default function OTPInput({ route }) {
   const navigation = useNavigation();
-  const verificationId =" route.params.verificationId";
-  const phoneNumber = "route.params.phoneNumber";
+  const verificationId = route.params.verificationId;
+  const phoneNumber = route.params.phoneNumber;
   const [isLoading, setIsLoading] = React.useState(false);
   const [otp, setOtp] = React.useState("");
   async function verify() {
@@ -92,10 +93,28 @@ export default function OTPInput({ route }) {
           flex: 1,
           flexDirection: "row",
           alignItems: "center",
-          right: 10,
-        }}
+         }}
       >
-        <OTPInputView
+        <CodeInput
+          onChangeText={(text) => {
+            setOtp(text);
+          }}
+          codeLength={6}
+          activeColor={COLORS.primary}
+          onFulfill={(code) => {
+            setOtp(code);
+            verify();
+          }}
+          inactiveColor={COLORS.primary}
+          autoFocus={true}
+          ignoreCase={true}
+           
+        autoComplete="sms-otp"
+          inputPosition="center"
+          keyboardType="number-pad"
+          className="border-b"
+        />
+        {/* <OTPInputView
         codeInputFieldStyle={{
           width: 50,
           height: 50,
@@ -113,7 +132,7 @@ export default function OTPInput({ route }) {
           }}
           code=""
           autoFocusOnLoad={true}
-        ></OTPInputView>
+        ></OTPInputView> */}
         {/* <OTPTextInput
           ref={(e) => (otpInput = e)}
           handleTextChange={(text) => setOtp(text)}

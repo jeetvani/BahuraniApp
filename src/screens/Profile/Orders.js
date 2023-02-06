@@ -22,7 +22,9 @@ export default function Orders({ route }) {
   const [OrderData, setOrderData] = useState([]);
   const getUserOrders = async () => {
     getOrdersAPI().then((response) => {
-      console.log(response.data.OrderData);
+      const data = response.data.OrderData[0].Order_Data;
+      const m =  JSON.parse(data[0].ProductData);
+      console.log(m);
       setOrderData(response.data.OrderData);
       
     });

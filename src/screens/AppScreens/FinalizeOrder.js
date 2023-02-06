@@ -11,7 +11,7 @@ import { COLORS } from "../../Constants/res/COLORS";
 
 import HomeScreenLayout from "../../Components/HomeScreenCompoenents/HomeScreenLayout";
 import { Addresses, paymentMethods } from "../../Constants/fakeData";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, AntDesign, Ionicons } from "@expo/vector-icons";
 import PrimaryButton from "../../Components/PrimaryButton";
 import { CheckOutCart, createOrder } from "../../API/lib/orders";
 import { useNavigation } from "@react-navigation/native";
@@ -55,6 +55,7 @@ export default function FinalizeOrder({ route }) {
           Address: JSON.stringify(Address),
           PaymentMethod:
             PaymentMethod == 1 ? "Cash On Delivery" : "Online Payment",
+          CouponId: route.params.CouponId,
         })
         .then((res) => {
           console.log(res.data);
@@ -164,26 +165,7 @@ export default function FinalizeOrder({ route }) {
                         : COLORS.black,
                   }}
                 >
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text>
-                      <FontAwesome
-                        name="dot-circle-o"
-                        size={16}
-                        color={
-                          SelectedAddress == item.Address_Id
-                            ? COLORS.primary
-                            : COLORS.black
-                        }
-                      />
-                    </Text>
-                  </View>
-                  <View style={{ flex: 4 }}>
+                  <View style={{ flex: 4, paddingHorizontal: 4 }}>
                     <Text
                       style={{
                         fontSize: 14,
@@ -231,6 +213,29 @@ export default function FinalizeOrder({ route }) {
                       {item.PinCode}
                     </Text>
                   </View>
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>
+                      <Ionicons
+                        name={
+                          SelectedAddress == item.Address_Id
+                            ? "ios-radio-button-on"
+                            : "ios-radio-button-off"
+                        }
+                        size={16}
+                        color={
+                          SelectedAddress == item.Address_Id
+                            ? COLORS.primary
+                            : COLORS.black
+                        }
+                      />
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               )}
             />
@@ -247,13 +252,28 @@ export default function FinalizeOrder({ route }) {
                   style={{
                     flexDirection: "row",
                     marginVertical: 5,
-                    padding: 5,
+                    padding: 8,
                     borderWidth: PaymentMethod == item.id ? 1 : 0.4,
                     borderRadius: 5,
                     borderColor:
-                      PaymentMethod == item.id ? COLORS.primary : COLORS.black,
+                      PaymentMethod == item.id ? COLORS.black : COLORS.black,
+                      
                   }}
                 >
+                  <View style={{ flex: 4 }}>
+                    <Text
+                      style={{
+                        fontSize: 16,
+
+                        color:
+                          PaymentMethod == item.id
+                            ? COLORS.black
+                            : COLORS.black,
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                  </View>
                   <View
                     style={{
                       flex: 1,
@@ -262,9 +282,9 @@ export default function FinalizeOrder({ route }) {
                     }}
                   >
                     <Text>
-                      <FontAwesome
+                      <Ionicons
                         size={16}
-                        name="dot-circle-o"
+                        name={ PaymentMethod==item.id?"ios-radio-button-on":"ios-radio-button-off"}
                         color={
                           PaymentMethod == item.id
                             ? COLORS.primary
@@ -273,20 +293,7 @@ export default function FinalizeOrder({ route }) {
                       />
                     </Text>
                   </View>
-                  <View style={{ flex: 4 }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-
-                        color:
-                          PaymentMethod == item.id
-                            ? COLORS.primary
-                            : COLORS.black,
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-                  </View>
+            
                 </TouchableOpacity>
               )}
             />
