@@ -32,12 +32,13 @@ export default function CartScreen() {
   const [mrpTotal, setMrpTotal] = useState(0);
   const [saved, setSaved] = useState(0);
   const [total, setTotal] = useState(0);
-  const [AppliedCoupon, setAppliedCoupon] = useState('');
+  const [AppliedCoupon, setAppliedCoupon] = useState("");
   const [PreferredProducts, setPreferredProducts] = useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [Data, setData] = useState([]);
   const [Coupons, setCoupons] = useState([]);
   const [OfferPanel, setOfferPanel] = useState(false);
+  const [CouponValue, setCouponValue] = useState(0);
   const navigation = useNavigation();
 
   const getCoupons = () => {
@@ -79,6 +80,21 @@ export default function CartScreen() {
         navigation.navigate(bottomTabScreens.AccountScreen.name);
       }
     });
+  };
+
+  const validateCoupon = () => {
+    axiosClient
+      .post("/ValidateCoupon", {
+        CouponId: AppliedCoupon,
+      })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status === 200) {
+          setCouponValue(response.data.data.Value);
+        } else {
+          ToastAndroid.show(response.data.msg, ToastAndroid.SHORT);
+        }
+      });
   };
 
   const [subs, setSubs] = React.useState([]);
@@ -249,18 +265,17 @@ export default function CartScreen() {
                     marginTop: 4,
                   }}
                 />
+                <View style={{
+                  paddingTop: 10,
+                }}>
+<Text>
+                  {
+                    CouponValue==0?"": CouponValue+" OFF "
+                  }
+</Text>
+                </View>
                 <Text
-                  onPress={() => {
-                    axiosClient
-                      .post("/ValidateCoupon", {
-                        CouponId: AppliedCoupon,
-                      })
-                      .then((response) => {
-                        console.log("====================================");
-                        console.log(response.data);
-                        console.log("====================================");
-                      });
-                  }}
+                  onPress={() => {}}
                   style={{
                     textAlign: "right",
                     bottom: 30,
@@ -377,7 +392,7 @@ export default function CartScreen() {
                       color: COLORS.black,
                     }}
                   >
-                    - ₹{saved}
+                    - ₹{saved + CouponValue}
                   </Text>
                 </View>
               </View>
@@ -471,7 +486,7 @@ export default function CartScreen() {
                       color: COLORS.black,
                     }}
                   >
-                    ₹{total}
+                    ₹{total - CouponValue}
                   </Text>
                 </View>
               </View>

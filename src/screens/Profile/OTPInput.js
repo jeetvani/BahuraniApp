@@ -103,7 +103,10 @@ export default function OTPInput({ route }) {
           activeColor={COLORS.primary}
           onFulfill={(code) => {
             setOtp(code);
-            verify();
+        setTimeout(() => {
+          
+          verify();
+        }, 500);
           }}
           inactiveColor={COLORS.primary}
           autoFocus={true}

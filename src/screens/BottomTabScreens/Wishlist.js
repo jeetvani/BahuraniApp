@@ -48,7 +48,7 @@ export default function Wishlist() {
   }, []);
 
   const getWishlistData = async () => {
-    setIsLoading(true);
+   
     getWishlistDataAPI().then((response) => {
       if (response.data.status === 200) {
         console.log("Wishlist Data");
