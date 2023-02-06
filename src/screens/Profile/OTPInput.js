@@ -14,8 +14,8 @@ import OTPTextInput from "react-native-otp-textinput";
 import OTPInputView from "react-native-otp-box";
 export default function OTPInput({ route }) {
   const navigation = useNavigation();
-  const verificationId = route.params.verificationId;
-  const phoneNumber = route.params.phoneNumber;
+  const verificationId =" route.params.verificationId";
+  const phoneNumber = "route.params.phoneNumber";
   const [isLoading, setIsLoading] = React.useState(false);
   const [otp, setOtp] = React.useState("");
   async function verify() {

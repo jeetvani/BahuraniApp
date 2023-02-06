@@ -30,27 +30,45 @@ export default function AccountDetails() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isMakrketingUser, setIsMarketingUser] = useState(false);
   const navigation = useNavigation();
-  const unsubscribe = navigation.addListener("focus", () => {
-    setLoading(true);
-    getUserProfile()
-      .then((res) => {
-        console.log(res.data);
-        setLoading(false);
-        setUserName(res.data.UserProfile[0].Name);
-        setProfilePicture(res.data.UserProfile[0].Profile_Picture);
-        setIsMarketingUser(res.data.UserProfile[0].isMarketingUser);
-        setPhoneNumber(res.data.UserProfile[0].PhoneNumber);
-        //  setUserName(res.data.UserProfile[0].Name);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  
+  const [subs, setSubs] = React.useState([]);
+  
+  React.useEffect(() => {
+    setSubs([
+      navigation.addListener("focus", () => {
+        setLoading(true);
+        getUserProfile()
+          .then((res) => {
+            console.log(res.data);
+            setLoading(false);
+            setUserName(res.data.UserProfile[0].Name);
+            setProfilePicture(res.data.UserProfile[0].Profile_Picture);
+            setIsMarketingUser(res.data.UserProfile[0].isMarketingUser);
+            setPhoneNumber(res.data.UserProfile[0].PhoneNumber);
+            //  setUserName(res.data.UserProfile[0].Name);
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+    
+      }),
+    ]);
 
-    return unsubscribe;
-  });
+
+    const unsubscribe = () => {
+      navigation.removeAllListeners();
+    };
+    // Remove all listeners, because there have to be no listeners on unmounted screen
+    return () => unsubscribe();
+  }, [
+    
+  ]);
+
+
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScreenHeader />

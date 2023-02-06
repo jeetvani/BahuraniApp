@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   StyleSheet,
+  LayoutAnimation,
 } from "react-native";
 import React, { useState } from "react";
 
@@ -15,6 +16,7 @@ import {
   decreaseProductQuantityAPI,
   deleteProductFromCartAPI,
   increaseProductQuantityAPI,
+  removeFromWishlistAPI,
 } from "../../API/lib/product";
 
 export default function WishlistCard({
@@ -27,7 +29,7 @@ export default function WishlistCard({
   ProductQuantity,
   functionQuantityChange,
   ItemInCart,
-  VariantId
+  VariantId,
 }) {
   const [Quantity, setQuantity] = useState(ProductQuantity);
   const [processRunning, setProcessRunning] = useState(false);
@@ -36,17 +38,38 @@ export default function WishlistCard({
     addToCartAPI({
       ProductId: ProductId,
       Quantity: 1,
-      VariantId: VariantId
+      VariantId: VariantId,
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          
+          functionQuantityChange();
+        }
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
+  };
 
-    }).then((response) => {
-      console.log(response.data);
-      if (response.data.status == 200) {
-        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-      }
-    }).catch((err) => {
-      ToastAndroid.show(err.message, ToastAndroid.SHORT);
+  const removeFromWishlist = async (ProductId) => {
+    
+    removeFromWishlistAPI(ProductId)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status == 200) {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        //remove from wishlist with animation
+        functionQuantityChange();
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);  
 
-    });
+        
+        }
+      })
+      .catch((err) => {
+        ToastAndroid.show(err.message, ToastAndroid.SHORT);
+      });
   };
 
   const IncreaseProductQuantity = async () => {
@@ -60,7 +83,7 @@ export default function WishlistCard({
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
           setProcessRunning(false);
           setQuantity(parseInt(Quantity) + 1);
-          //  functionQuantityChange();
+          functionQuantityChange();
         }
       })
       .catch((err) => {
@@ -81,7 +104,7 @@ export default function WishlistCard({
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
             setQuantity(parseInt(Quantity) - 1);
-            //     functionQuantityChange();
+            functionQuantityChange();
           }
         })
         .catch((err) => {
@@ -99,8 +122,8 @@ export default function WishlistCard({
           if (response.data.status == 200) {
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
             setProcessRunning(false);
-            //refresh cart screen
-            //    functionQuantityChange();
+
+            functionQuantityChange();
           } else {
             setProcessRunning(false);
             ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
@@ -227,11 +250,9 @@ export default function WishlistCard({
           ) : (
             <>
               <TouchableOpacity
-              onPress={()=>{
-                AddToCart(
-                  ProductId
-                );
-              }}
+                onPress={() => {
+                  AddToCart(ProductId);
+                }}
                 style={{
                   flex: 1,
                 }}
@@ -244,7 +265,12 @@ export default function WishlistCard({
                   />
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1 }}>
+              <TouchableOpacity
+                onPress={() => {
+                  removeFromWishlist(ProductId);
+                }}
+                style={{ flex: 1 }}
+              >
                 <View style={styles.floatingButton}>
                   <FontAwesome name="trash" size={20} color={COLORS.primary} />
                 </View>

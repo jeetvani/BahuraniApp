@@ -72,3 +72,12 @@ export async function checkProductInWishlistAPI(ProductId) {
     UserId: UserId,
   });
 }
+
+export async function removeFromWishlistAPI(ProductId) {
+
+  const UserId = await AsyncStorage.getItem("UserId");
+  return axiosClient.post("/removeFromWishlist", {
+    ProductId: ProductId,
+    UserId: UserId,
+  });
+}

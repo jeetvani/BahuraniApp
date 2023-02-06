@@ -24,6 +24,7 @@ import {
   getPreferableProducts,
   getProductById,
   increaseProductQuantityAPI,
+  removeFromWishlistAPI,
 } from "../../API/lib/product";
 //import icons
 import { AntDesign, Ionicons, FontAwesome } from "@expo/vector-icons";
@@ -113,57 +114,72 @@ export default function ProductDetails({ route }) {
     });
   };
 
-  const unsubscribe = navigation.addListener(
-    "focus",
-    async () => {
-      await getProductById(ProductId)
-        .then(async (res) => {
-          const ProductName = res.data[0].ProductName;
-          setProductName(ProductName);
-          setVariants(res.data[0].Variants);
-          setSelectedVariant(res.data[0].Variants[0]);
-          setProductDescription(res.data[0].ProductDescription);
-          setProductImages(res.data[0].ProductImages);
-          setCategoryName(res.data[0].Category);
-          setCategoryId(res.data[0].CategoryId);
-          await getPreferableProducts().then(async (res) => {
-            setPrefferableProducts(res.data.PreferableProducts);
+  const removeFromWishlist = () => {
+    removeFromWishlistAPI(ProductId).then((response) => {
+      console.log(response.data);
+      if (response.data.status == 200) {
+        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        setIsExistsInWishList(false);
+      }
+    });
+  };
 
-            await checkAuth().then((res) => {
-              if (res) {
-                checkProductInCartAPI(ProductId)
-                  .then((response) => {
-                    console.log(response.data);
-                    if (response.data.status == 100) {
-                      setIsExitsInCart(true);
-                      setQuantity(response.data.quantity);
-                    }
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  })
-                  .finally(() => {
-                    checkProductInWishlistAPI(ProductId).then((response) => {
+  const [subs, setSubs] = React.useState([]);
+  React.useEffect(() => {
+    setSubs([
+      navigation.addListener("focus", async () => {
+        await getProductById(ProductId)
+          .then(async (res) => {
+            const ProductName = res.data[0].ProductName;
+            setProductName(ProductName);
+            setVariants(res.data[0].Variants);
+            setSelectedVariant(res.data[0].Variants[0]);
+            setProductDescription(res.data[0].ProductDescription);
+            setProductImages(res.data[0].ProductImages);
+            setCategoryName(res.data[0].Category);
+            setCategoryId(res.data[0].CategoryId);
+            await getPreferableProducts().then(async (res) => {
+              setPrefferableProducts(res.data.PreferableProducts);
+
+              await checkAuth().then((res) => {
+                if (res) {
+                  checkProductInCartAPI(ProductId)
+                    .then((response) => {
                       console.log(response.data);
                       if (response.data.status == 100) {
-                        setIsExistsInWishList(true);
+                        setIsExitsInCart(true);
+                        setQuantity(response.data.quantity);
                       }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    })
+                    .finally(() => {
+                      checkProductInWishlistAPI(ProductId).then((response) => {
+                        console.log(response.data);
+                        if (response.data.status == 100) {
+                          setIsExistsInWishList(true);
+                        }
+                      });
                     });
-                  });
-              }
+                }
+              });
             });
+          })
+          .finally(() => {
+            setTimeout(() => {
+              setisLoading(false);
+            }, 500);
           });
-        })
-        .finally(() => {
-          setTimeout(() => {
-            setisLoading(false);
-          }, 500);
-        });
+      }),
+    ]);
 
-      return unsubscribe;
-    },
-    [navigation]
-  );
+    const unsubscribe = () => {
+      navigation.removeAllListeners();
+    };
+    // Remove all listeners, because there have to be no listeners on unmounted screen
+    return () => unsubscribe();
+  }, []);
 
   const addToWishList = async () => {
     addToWishlistAPI(ProductId)
@@ -203,7 +219,9 @@ export default function ProductDetails({ route }) {
           <View
             style={{ marginVertical: 10, alignItems: "flex-end", right: 30 }}
           >
-            <TouchableOpacity onPress={addToWishList}>
+            <TouchableOpacity
+              onPress={IsExistsInWishList ? removeFromWishlist : addToWishList}
+            >
               <FontAwesome
                 name={IsExistsInWishList ? "heart" : "heart-o"}
                 size={25}

@@ -25,27 +25,38 @@ export default function Wishlist() {
   const [isLoading, setIsLoading] = React.useState(true);
   const navigation = useNavigation();
 
+  const [subs, setSubs] = React.useState([]);
+  React.useEffect(() => {
+    setSubs([
+      navigation.addListener("focus", () => {
+        checkAuth().then((response) => {
+          if (response) {
+            getWishlistData();
+          }
+          if (!response) {
+            navigation.navigate(bottomTabScreens.AccountScreen.name);
+          }
+        });
+      }),
+    ]);
+
+    const unsubscribe = () => {
+      navigation.removeAllListeners();
+    };
+    // Remove all listeners, because there have to be no listeners on unmounted screen
+    return () => unsubscribe();
+  }, []);
+
   const getWishlistData = async () => {
     getWishlistDataAPI().then((response) => {
       if (response.data.status === 200) {
+        console.log("Wishlist Data");
+        console.log(response.data.Wishlist);
         setWishlistData(response.data.Wishlist);
         setIsLoading(false);
       }
     });
   };
-
-  const unsubscribe = navigation.addListener("focus", () => {
-    checkAuth().then((response) => {
-      if (response) {
-        getWishlistData();
-      }
-      if (!response) {
-        navigation.navigate(bottomTabScreens.AccountScreen.name);
-      }
-    });
-
-    return unsubscribe;
-  },[navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -72,7 +83,6 @@ export default function Wishlist() {
                     <WishlistCard
                       functionQuantityChange={getWishlistData}
                       ProductId={item.Product_Id}
-                      
                       ImgSrc={item.Product_Status.Image}
                       MRP={parseInt(item.Product_Status.Product_Variants.mrp)}
                       ItemInCart={item.Product_Status.exitsInCart}

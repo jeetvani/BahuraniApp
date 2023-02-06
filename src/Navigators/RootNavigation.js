@@ -8,6 +8,7 @@ import {
 } from "@react-navigation/stack";
 import { appStackScreens, authStackScreens } from "../Constants/appScreens";
 import BannerZoom from "../screens/AppScreens/BannerZoom";
+import OTPInput from "../screens/Profile/OTPInput";
 
 export default function RootNavigation() {
   const stack = createStackNavigator();
@@ -19,7 +20,7 @@ export default function RootNavigation() {
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}
       >
-        <stack.Screen name="Bottomtab" component={BottomTabNavigator} />
+        <stack.Screen name="Bottomtab" component={OTPInput} />
         <stack.Screen
           name={appStackScreens.OrderSuccess.name}
           component={appStackScreens.OrderSuccess.screen}

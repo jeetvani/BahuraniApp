@@ -76,13 +76,30 @@ export default function CartScreen() {
     });
   };
 
-  const unsubscribe = navigation.addListener("focus", async () => {
-    getCartData().then(() => {
-      getCoupons();
-    });
-    return unsubscribe;
-  });
 
+  const [subs, setSubs] = React.useState([]);
+  React.useEffect(() => {
+    setSubs([
+      navigation.addListener("focus", () => {
+        checkAuth().then((response) => {
+          if (response) {
+            getCartData();
+          }
+          if (!response) {
+            navigation.navigate(bottomTabScreens.AccountScreen.name);
+          }
+        });
+      }),
+    ]);
+
+    const unsubscribe = () => {
+      navigation.removeAllListeners();
+    };
+    // Remove all listeners, because there have to be no listeners on unmounted screen
+    return () => unsubscribe();
+  }, []);
+
+  
   const payment = () => {
     navigation.navigate(appStackScreens.FinalizeOrder.name, {
       amount: total,
