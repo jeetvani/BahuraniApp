@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ToastAndroid,
   ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import React, { useLayoutEffect } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
@@ -20,6 +21,9 @@ import {
   decreaseProductQuantityAPI,
   increaseProductQuantityAPI,
 } from "../../API/lib/product";
+import PrimaryButton from "../../Components/PrimaryButton";
+import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
+import AnimatedLottieView from "lottie-react-native";
 export default function Wishlist() {
   const [WishlistData, setWishlistData] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -49,7 +53,6 @@ export default function Wishlist() {
   }, []);
 
   const getWishlistData = async () => {
-   
     getWishlistDataAPI().then((response) => {
       if (response.data.status === 200) {
         console.log("Wishlist Data");
@@ -70,8 +73,35 @@ export default function Wishlist() {
           <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
       ) : WishlistData.length === 0 ? (
-        <View>
-          <Text>No items in wishlist</Text>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+
+            backgroundColor: COLORS.white,
+          }}
+        >
+          <AnimatedLottieView
+            source={require("../../../assets/emptycart.json")}
+            autoPlay
+            style={{ height: Dimensions.get("screen").height * 0.5 }}
+            loop={false}
+          />
+          <View
+            style={{
+              marginHorizontal: 30,
+              top: Dimensions.get("screen").height * 0.003,
+            }}
+          >
+            <PrimaryAuthHeader headText={"Your Wishlist is Empty"} />
+
+            <PrimaryButton
+              onPress={() => {
+                navigation.navigate(bottomTabScreens.HomeScreen.name);
+              }}
+              content={"Continue Shopping"}
+            />
+          </View>
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -90,7 +120,7 @@ export default function Wishlist() {
                       ItemInCart={item.Product_Status.exitsInCart}
                       ProductQuantity={
                         item.Product_Status.exitsInCart
-                          ? (item.Product_Status.quantity)
+                          ? item.Product_Status.quantity
                           : 0
                       }
                       OurPrice={parseInt(

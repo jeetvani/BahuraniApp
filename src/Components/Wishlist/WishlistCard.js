@@ -44,8 +44,9 @@ export default function WishlistCard({
         console.log(response.data);
         if (response.data.status == 200) {
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-          
-          functionQuantityChange();
+  setQuantity(1);        
+  functionQuantityChange();
+
         }
       })
       .catch((err) => {

@@ -19,9 +19,9 @@ export default function OTPInput({ route }) {
   const phoneNumber = route.params.phoneNumber;
   const [isLoading, setIsLoading] = React.useState(false);
   const [otp, setOtp] = React.useState("");
-  async function verify() {
+  async function verify(otpCode) {
     setIsLoading(true);
-    verifyOTP(verificationId, otp)
+    verifyOTP(verificationId, otpCode?otpCode:otp)
       .then((res) => {
         console.log(res);
         checkPhoneNumber(phoneNumber).then((response) => {
@@ -101,20 +101,18 @@ export default function OTPInput({ route }) {
           }}
           codeLength={6}
           activeColor={COLORS.primary}
-          onFulfill={(code) => {
-           setOtp(code);
-        setTimeout(() => {
-          
-          verify();
-        }, 1000);
+          onFulfill={(code)=>{
+    setOtp(code)
+    verify(code)
+            
+
           }}
           inactiveColor={COLORS.primary}
           autoFocus={true}
           ignoreCase={true}
-           
-        autoComplete="sms-otp"
+          autoComplete="sms-otp"
           inputPosition="center"
-          keyboardType="number-pad"
+          keyboardType="numeric"
           className="border-b"
         />
         {/* <OTPInputView

@@ -48,6 +48,7 @@ export default function CartScreen() {
   };
 
   const getCartData = async () => {
+    
     checkAuth().then(async (response) => {
       if (response) {
         await getCartDataAPI()
@@ -91,11 +92,14 @@ export default function CartScreen() {
         console.log(response.data);
         if (response.data.status === 200) {
           setCouponValue(response.data.data[0].Value);
-          
         } else {
           setCouponValue(0);
           ToastAndroid.show(response.data.msg, ToastAndroid.SHORT);
         }
+      }).catch((error) => {
+        console.log(error);
+        ToastAndroid.show("Something went wrong", ToastAndroid.SHORT);
+        setCouponValue(0);
       });
   };
 
@@ -125,7 +129,7 @@ export default function CartScreen() {
 
   const payment = () => {
     navigation.navigate(appStackScreens.FinalizeOrder.name, {
-      amount: total - CouponValue, 
+      amount: parseInt(total) - parseInt(CouponValue),
       saved: saved,
       CouponId: AppliedCoupon,
     });
@@ -263,7 +267,7 @@ export default function CartScreen() {
                   <TextInput
                     onChangeText={(text) => {
                       setAppliedCoupon(text);
-                    }}
+                    }} 
                     placeholder=" % Enter Coupon Code"
                     style={{
                       paddingVertical: 10,
@@ -273,9 +277,11 @@ export default function CartScreen() {
                     }}
                   />
 
-                  <View style={{ flex: 1, justifyContent: "flex-end" }}>
+                  <TouchableOpacity 
+                    onPress={validateCoupon}
+                    
+                  style={{ flex: 1, justifyContent: "flex-end" }}>
                     <Text
-                      onPress={validateCoupon}
                       style={{
                         textAlign: "right",
                         fontWeight: "bold",
@@ -284,14 +290,18 @@ export default function CartScreen() {
                     >
                       APPLY
                     </Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
                 <View
                   style={{
                     paddingTop: 10,
                   }}
                 >
-                  <Text>{CouponValue == 0 ? "" : CouponValue + " OFF "}</Text>
+                  <Text style={{ fontWeight: "bold", fontSize: 12,color:COLORS.Positive }}>
+                    {CouponValue == 0
+                      ? ""
+                      : AppliedCoupon + ` Applied ` +`₹`+CouponValue + " OFF "}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -400,7 +410,7 @@ export default function CartScreen() {
                       color: COLORS.black,
                     }}
                   >
-                    - ₹{saved + CouponValue}
+                    - ₹{parseInt(saved) + parseInt(CouponValue)}
                   </Text>
                 </View>
               </View>
@@ -554,7 +564,7 @@ export default function CartScreen() {
           }}
         >
           <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1 }}> 
+            <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 12 }}>Payable Amount</Text>
               <Text
                 style={{
@@ -564,7 +574,7 @@ export default function CartScreen() {
                   fontSize: 16,
                 }}
               >
-                ₹{total-CouponValue}
+                ₹{total - CouponValue}
               </Text>
             </View>
             <View style={{ flex: 1, justifyContent: "center" }}>

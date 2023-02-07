@@ -23,6 +23,7 @@ import RazorpayCheckout from "react-native-razorpay";
 export default function FinalizeOrder({ route }) {
   const amount = route.params.amount;
   const saved = route.params.saved;
+  const CouponId = route.params.CouponId;
   const navigation = useNavigation();
   const [SelectedAddress, setSelectedAddress] = useState(false);
   const [PaymentMethod, setPaymentMethod] = useState(false);
@@ -43,6 +44,9 @@ export default function FinalizeOrder({ route }) {
     return unsubscribe;
   });
   const proceedToPayment = async () => {
+    console.log('====================================');
+    console.log(SelectedAddress, PaymentMethod,CouponId );
+    console.log('====================================');
     if (!SelectedAddress || !PaymentMethod) {
       alert("Please Select Address and Payment Method");
     } else {
@@ -55,7 +59,7 @@ export default function FinalizeOrder({ route }) {
           Address: JSON.stringify(Address),
           PaymentMethod:
             PaymentMethod == 1 ? "Cash On Delivery" : "Online Payment",
-          CouponId: route.params.CouponId,
+            CouponId: CouponId,
         })
         .then((res) => {
           console.log(res.data);
