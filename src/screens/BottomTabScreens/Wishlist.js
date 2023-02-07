@@ -31,6 +31,7 @@ export default function Wishlist() {
       navigation.addListener("focus", () => {
         checkAuth().then((response) => {
           if (response) {
+            setIsLoading(true);
             getWishlistData();
           }
           if (!response) {
@@ -89,7 +90,7 @@ export default function Wishlist() {
                       ItemInCart={item.Product_Status.exitsInCart}
                       ProductQuantity={
                         item.Product_Status.exitsInCart
-                          ? parseInt(item.Product_Status.quantity)
+                          ? (item.Product_Status.quantity)
                           : 0
                       }
                       OurPrice={parseInt(

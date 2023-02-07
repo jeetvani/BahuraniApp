@@ -90,8 +90,10 @@ export default function CartScreen() {
       .then((response) => {
         console.log(response.data);
         if (response.data.status === 200) {
-          setCouponValue(response.data.data.Value);
+          setCouponValue(response.data.data[0].Value);
+          
         } else {
+          setCouponValue(0);
           ToastAndroid.show(response.data.msg, ToastAndroid.SHORT);
         }
       });
@@ -123,7 +125,7 @@ export default function CartScreen() {
 
   const payment = () => {
     navigation.navigate(appStackScreens.FinalizeOrder.name, {
-      amount: total,
+      amount: total - CouponValue, 
       saved: saved,
       CouponId: AppliedCoupon,
     });
@@ -253,38 +255,44 @@ export default function CartScreen() {
                 }}
               />
               <View>
-                <TextInput
-                  onChangeText={(text) => {
-                    setAppliedCoupon(text);
-                  }}
-                  placeholder=" % Enter Coupon Code"
+                <View
                   style={{
-                    paddingVertical: 10,
-                    paddingHorizontal: 2,
-                    borderBottomWidth: 0.4,
-                    marginTop: 4,
-                  }}
-                />
-                <View style={{
-                  paddingTop: 10,
-                }}>
-<Text>
-                  {
-                    CouponValue==0?"": CouponValue+" OFF "
-                  }
-</Text>
-                </View>
-                <Text
-                  onPress={() => {}}
-                  style={{
-                    textAlign: "right",
-                    bottom: 30,
-                    fontWeight: "bold",
-                    letterSpacing: 1,
+                    flexDirection: "row",
                   }}
                 >
-                  APPLY
-                </Text>
+                  <TextInput
+                    onChangeText={(text) => {
+                      setAppliedCoupon(text);
+                    }}
+                    placeholder=" % Enter Coupon Code"
+                    style={{
+                      paddingVertical: 10,
+                      paddingHorizontal: 2,
+                      borderBottomWidth: 0.4,
+                      flex: 4,
+                    }}
+                  />
+
+                  <View style={{ flex: 1, justifyContent: "flex-end" }}>
+                    <Text
+                      onPress={validateCoupon}
+                      style={{
+                        textAlign: "right",
+                        fontWeight: "bold",
+                        letterSpacing: 1,
+                      }}
+                    >
+                      APPLY
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    paddingTop: 10,
+                  }}
+                >
+                  <Text>{CouponValue == 0 ? "" : CouponValue + " OFF "}</Text>
+                </View>
               </View>
             </View>
             <View
@@ -546,7 +554,7 @@ export default function CartScreen() {
           }}
         >
           <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}> 
               <Text style={{ fontSize: 12 }}>Payable Amount</Text>
               <Text
                 style={{
@@ -556,7 +564,7 @@ export default function CartScreen() {
                   fontSize: 16,
                 }}
               >
-                ₹{total}
+                ₹{total-CouponValue}
               </Text>
             </View>
             <View style={{ flex: 1, justifyContent: "center" }}>

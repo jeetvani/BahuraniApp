@@ -32,6 +32,7 @@ export default function UserRegistrationForm({ route }) {
   const [Street, setStreet] = useState("");
   const [HouseNo, setHouseNo] = useState("");
   const registerUser = async () => {
+    setisLoading(true)
     //check if all fields are filled
     if (
       Name == "" ||
@@ -296,6 +297,7 @@ export default function UserRegistrationForm({ route }) {
                 isLoading={isLoading}
                 fontSize={16}
                 filled={true}
+                disabled={isLoading}
                 content={"Register"}
               />
             </View>
