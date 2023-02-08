@@ -40,6 +40,7 @@
         "react-native-image-slider-banner": "^1.0.3",
         "react-native-image-zoom-viewer": "^3.0.1",
         "react-native-linear-gradient": "^2.6.2",
+        "react-native-otp-auto-fill": "^0.1.17",
         "react-native-otp-box": "^1.0.24",
         "react-native-otp-textinput": "^1.0.0",
         "react-native-push-notification": "^8.1.1",

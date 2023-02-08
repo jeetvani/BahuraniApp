@@ -13,9 +13,10 @@ import { authStackScreens } from "../../Constants/appScreens";
 import OTPTextInput from "react-native-otp-textinput";
 import OTPInputView from "react-native-otp-box";
 import CodeInput from "react-native-confirmation-code-input";
+import generateOTP from "../../functions/generateOTP";
 export default function OTPInput({ route }) {
   const navigation = useNavigation();
-  const verificationId = route.params.verificationId;
+  let verificationId = route.params.verificationId;
   const phoneNumber = route.params.phoneNumber;
   const [isLoading, setIsLoading] = React.useState(false);
   const [otp, setOtp] = React.useState("");
@@ -115,6 +116,18 @@ export default function OTPInput({ route }) {
           keyboardType="numeric"
           className="border-b"
         />
+         <Text
+          style={{
+            color: COLORS.primary,
+            fontWeight: "bold",
+            fontSize: 16,
+            marginLeft: 10,
+          }}
+          onPress={() => {
+         generateOTP(phoneNumber) }}
+        >
+          Resend OTP
+        </Text> 
         {/* <OTPInputView
         codeInputFieldStyle={{
           width: 50,

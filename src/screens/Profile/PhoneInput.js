@@ -73,7 +73,7 @@ export default function PhoneInput() {
     >
       <View style={{ flex: 1, justifyContent: "center" }}>
         <PrimaryAuthHeader
-          headText={"Sign in to Bahurani Mart !"}
+          headText={"Sign in to Bahurani Brand !"}
         />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>

@@ -44,6 +44,7 @@ export default function UserRegistrationForm({ route }) {
       HouseNo == ""
     ) {
       alert("Please fill all the fields");
+      setisLoading(false)
       return;
     } else {
       if (
