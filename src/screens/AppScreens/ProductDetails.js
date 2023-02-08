@@ -33,7 +33,7 @@ import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import { addToWishlistAPI } from "../../API/lib/user";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
-  const ProductId = route.params.ProductId;
+  const [ProductId,setProductId] = useState(route.params.ProductId);
   const [IsExistsInWishList, setIsExistsInWishList] = useState(false);
   const [Quantity, setQuantity] = useState(1);
   const [PrefferableProducts, setPrefferableProducts] = useState([]);
@@ -179,7 +179,7 @@ export default function ProductDetails({ route }) {
     };
     // Remove all listeners, because there have to be no listeners on unmounted screen
     return () => unsubscribe();
-  }, []);
+  }, [ProductId]);
 
   const addToWishList = async () => {
     addToWishlistAPI(ProductId)
@@ -338,6 +338,9 @@ export default function ProductDetails({ route }) {
                   data={PrefferableProducts}
                   renderItem={({ item }) => (
                     <ProductCard
+                    onPress={() => {
+                      setProductId(item.ProductId);
+                    }}
                       Variants={item.Variants}
                       img={item.ProductImages[0]}
                       mrp={item.Variants[0].mrp}

@@ -22,30 +22,121 @@ export var CouponData = [
   },
 ];
 
+export const fakeOrder = [
+  {
+    Order_Id: "order_LE0po0sJpywXDq",
+    Order_Data: [
+      {
+        ProductData: {
+          mrp: "100",
+          Quantity: "2",
+          ourPrice: "80",
+          Product_Id: "BahuraniProductrup2u1i37ldfzxf8c",
+          ProductName: "Bahurani Multigrain Aata",
+          VariantName: "1 kg",
+          ProductImage:
+            "https://firebasestorage.googleapis.com/v0/b/steerfreedemo.appspot.com/o/Besan%20500GM.png?alt=media&token=1990fa8b-c96e-464e-a065-330b0aa01eae",
+        },
+      },
+      {
+        ProductData: {
+          mrp: "700",
+          Quantity: "1",
+          ourPrice: "400",
+          Product_Id: "BahuraniProductrup2u1i37ldfzv3j1",
+          ProductName: "Bahurani Makka Aata",
+          VariantName: "800 gm",
+          ProductImage:
+            "https://firebasestorage.googleapis.com/v0/b/steerfreedemo.appspot.com/o/Makka%20Atta%20800%20GM.jpeg?alt=media&token=c13e961b-b324-4dd7-8a87-77524ed76c40",
+        },
+      },
+    ],
+    Address: [
+      {
+        User_Id: "BahuraniUserfwmp319ldvvftvi",
+        Address_Id: "BahuraniAddressfwmp319ldvvfuue",
+        Address: "Sbshbsbs | Hzhsbsh | Ehudhd | Sheueh | Syeyhe",
+        PinCode: "457887",
+        Name: "Jeet vani",
+        PhoneNumber: "9926579383",
+      },
+    ],
+    User_Id: "BahuraniUserfwmp319ldvvftvi",
+    Status: "In Process",
+    Payment_Method: "Cash On Delivery",
+    Payment_Status: "Pending",
+    Amount: "560",
+    OrderDate: "08-02-2023",
+  },
+  {
+    Order_Id: "order_LE0q2MAv5NGakB",
+    Order_Data: [
+      {
+        ProductData: {
+          mrp: "100",
+          Quantity: "2",
+          ourPrice: "80",
+          Product_Id: "BahuraniProductrup2u1i37ldfzxf8c",
+          ProductName: "Bahurani Multigrain Aata",
+          VariantName: "1 kg",
+          ProductImage:
+            "https://firebasestorage.googleapis.com/v0/b/steerfreedemo.appspot.com/o/Besan%20500GM.png?alt=media&token=1990fa8b-c96e-464e-a065-330b0aa01eae",
+        },
+      },
+      {
+        ProductData: {
+          mrp: "700",
+          Quantity: "1",
+          ourPrice: "400",
+          Product_Id: "BahuraniProductrup2u1i37ldfzv3j1",
+          ProductName: "Bahurani Makka Aata",
+          VariantName: "800 gm",
+          ProductImage:
+            "https://firebasestorage.googleapis.com/v0/b/steerfreedemo.appspot.com/o/Makka%20Atta%20800%20GM.jpeg?alt=media&token=c13e961b-b324-4dd7-8a87-77524ed76c40",
+        },
+      },
+    ],
+    Address: [
+      {
+        User_Id: "BahuraniUserfwmp319ldvvftvi",
+        Address_Id: "BahuraniAddressfwmp319ldvvfuue",
+        Address: "Sbshbsbs | Hzhsbsh | Ehudhd | Sheueh | Syeyhe",
+        PinCode: "457887",
+        Name: "Jeet vani",
+        PhoneNumber: "9926579383",
+      },
+    ],
+    User_Id: "BahuraniUserfwmp319ldvvftvi",
+    Status: "In Process",
+    Payment_Method: "Cash On Delivery",
+    Payment_Status: "Pending",
+    Amount: "560",
+    OrderDate: "08-02-2023",
+  },
+];
 
 export var fakeReferralData = [
-{
-  UsedBy: "Amit",
-  Date: "12/12/2020",
-  User_Id : "123456789",
-},
-{
-  UsedBy: "Suruchi",
-  Date: "22/05/2020",
-  User_Id : "123456789",
-},
-{
+  {
+    UsedBy: "Amit",
+    Date: "12/12/2020",
+    User_Id: "123456789",
+  },
+  {
+    UsedBy: "Suruchi",
+    Date: "22/05/2020",
+    User_Id: "123456789",
+  },
+  {
     UsedBy: "Akshay",
     Date: "29/11/2021",
-    User_Id : "123456789",
-},
-{
-  UsedBy: "Jeet",
-  Date: "18/03/2021",
-  User_Id : "123456789",
-}
-
-]
+    User_Id: "123456789",
+  },
+  {
+    UsedBy: "Jeet",
+    Date: "18/03/2021",
+    User_Id: "123456789",
+  },
+];
 
 export var fakeOrderData = [
   {

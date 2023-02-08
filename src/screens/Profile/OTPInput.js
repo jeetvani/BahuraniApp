@@ -15,6 +15,8 @@ import OTPInputView from "react-native-otp-box";
 import CodeInput from "react-native-confirmation-code-input";
 import generateOTP from "../../functions/generateOTP";
 export default function OTPInput({ route }) {
+
+
   const navigation = useNavigation();
   let verificationId = route.params.verificationId;
   const phoneNumber = route.params.phoneNumber;
@@ -22,7 +24,7 @@ export default function OTPInput({ route }) {
   const [otp, setOtp] = React.useState("");
   async function verify(otpCode) {
     setIsLoading(true);
-    verifyOTP(verificationId, otpCode?otpCode:otp)
+    verifyOTP(verificationId, otpCode ? otpCode : otp)
       .then((res) => {
         console.log(res);
         checkPhoneNumber(phoneNumber).then((response) => {
@@ -94,7 +96,7 @@ export default function OTPInput({ route }) {
           flex: 1,
           flexDirection: "row",
           alignItems: "center",
-         }}
+        }}
       >
         <CodeInput
           onChangeText={(text) => {
@@ -102,11 +104,9 @@ export default function OTPInput({ route }) {
           }}
           codeLength={6}
           activeColor={COLORS.primary}
-          onFulfill={(code)=>{
-    setOtp(code)
-    verify(code)
-            
-
+          onFulfill={(code) => {
+            setOtp(code);
+            verify(code);
           }}
           inactiveColor={COLORS.primary}
           autoFocus={true}
@@ -116,43 +116,23 @@ export default function OTPInput({ route }) {
           keyboardType="numeric"
           className="border-b"
         />
-         <Text
+      </View>
+      <View style={{ flex: 0.2 }}>
+        <Text
           style={{
+            textAlign:'right',
             color: COLORS.primary,
             fontWeight: "bold",
             fontSize: 16,
             marginLeft: 10,
           }}
           onPress={() => {
-         generateOTP(phoneNumber) }}
+            generateOTP('+91'+  phoneNumber);
+          }}
         >
           Resend OTP
-        </Text> 
-        {/* <OTPInputView
-        codeInputFieldStyle={{
-          width: 50,
-          height: 50,
-          borderTopWidth: 0,
-          borderLeftWidth: 0,
-          borderRightWidth: 0,
-        }}
-        codeInputHighlightStyle={{
-          borderColor: COLORS.primary,
-        }}
-          pinCount={6}
-          onCodeFilled={(code) => {
-            console.log(`Code is ${code}, you are good to go!`);
-            setOtp(code);
-          }}
-          code=""
-          autoFocusOnLoad={true}
-        ></OTPInputView> */}
-        {/* <OTPTextInput
-          ref={(e) => (otpInput = e)}
-          handleTextChange={(text) => setOtp(text)}
-          inputCount={6}
-          tintColor={COLORS.primary}
-        ></OTPTextInput> */}
+        </Text>
+        
       </View>
       <View style={{ paddingBottom: 30, flex: 1, justifyContent: "flex-end" }}>
         <PrimaryButton

@@ -14,3 +14,4 @@ get ColorPropType(): $FlowFixMe {
    console.warn('');
   return require('deprecated-react-native-prop-types').ViewPropTypes;
   },
+ 

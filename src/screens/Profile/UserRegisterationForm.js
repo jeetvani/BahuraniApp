@@ -14,6 +14,7 @@ import { v4 } from "uuid";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authStackScreens } from "../../Constants/appScreens";
 import { useNavigation } from "@react-navigation/native";
+import * as FIREBASE_MESSAGING from "@react-native-firebase/messaging";
 export default function UserRegistrationForm({ route }) {
   const navigation = useNavigation();
   const phoneNumber = route.params.phoneNumber;
@@ -32,7 +33,7 @@ export default function UserRegistrationForm({ route }) {
   const [Street, setStreet] = useState("");
   const [HouseNo, setHouseNo] = useState("");
   const registerUser = async () => {
-    setisLoading(true)
+    setisLoading(true);
     //check if all fields are filled
     if (
       Name == "" ||
@@ -44,7 +45,7 @@ export default function UserRegistrationForm({ route }) {
       HouseNo == ""
     ) {
       alert("Please fill all the fields");
-      setisLoading(false)
+      setisLoading(false);
       return;
     } else {
       if (
@@ -75,6 +76,18 @@ export default function UserRegistrationForm({ route }) {
             AsyncStorage.setItem("UserId", UserId);
             console.log("User Registered Successfully");
             setisLoading(false);
+
+            FIREBASE_MESSAGING.firebase
+              .messaging()
+              .registerDeviceForRemoteMessages()
+              .then((res) => {
+                console.log(res);
+                
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+
             navigation.navigate(authStackScreens.AuthCheck.name);
           } else {
             console.log("User Registration Failed");

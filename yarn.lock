@@ -6419,11 +6419,6 @@ react-native-linear-gradient@^2.6.2:
   resolved "https://registry.npmjs.org/react-native-linear-gradient/-/react-native-linear-gradient-2.6.2.tgz"
   integrity sha512-Z8Xxvupsex+9BBFoSYS87bilNPWcRfRsGC0cpJk72Nxb5p2nEkGSBv73xZbEHnW2mUFvP+huYxrVvjZkr/gRjQ==
 
-react-native-otp-auto-fill@^0.1.17:
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/react-native-otp-auto-fill/-/react-native-otp-auto-fill-0.1.17.tgz#746723c4932bbed6ea135b02cf3634e47e73f62e"
-  integrity sha512-BqFS9FIta18gtq8Z4wyoCLwaNxzPJWvvnu73L+yEu2ITI+izYGwwt8Rm9XwavdS+IiOZ9tilWKmCl+VhhGztQQ==
-
 react-native-otp-box@^1.0.24:
   version "1.0.24"
   resolved "https://registry.npmjs.org/react-native-otp-box/-/react-native-otp-box-1.0.24.tgz"
