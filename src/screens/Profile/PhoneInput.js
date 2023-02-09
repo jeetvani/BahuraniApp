@@ -5,6 +5,7 @@ import {
   TextInput,
   Dimensions,
   BackHandler,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
@@ -12,9 +13,33 @@ import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
 import { FontAwesome } from "@expo/vector-icons";
 import PrimaryButton from "../../Components/PrimaryButton";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { appStackScreens, authStackScreens, bottomTabScreens } from "../../Constants/appScreens";
+import {
+  appStackScreens,
+  authStackScreens,
+  bottomTabScreens,
+} from "../../Constants/appScreens";
 import generateOTP from "../../functions/generateOTP";
+import RNOtpVerify from "react-native-otp-verify";
 export default function PhoneInput() {
+  React.useEffect(() => {
+    RNOtpVerify.getHash().then(console.log).catch(console.log);
+
+    RNOtpVerify.getOtp()
+      .then((p) => RNOtpVerify.addListener(otpHandler))
+      .catch((p) => console.log(p));
+
+    return () => RNOtpVerify.removeListener();
+  }, []);
+
+  const otpHandler = (message: String) => {
+    console.log(message);
+    // const otp = /(\d{4})/g.exec(message)[1];
+
+    // console.log(otp);
+
+    RNOtpVerify.removeListener();
+    Keyboard.dismiss();
+  };
   const [textInputFocused, settextInputFocused] = useState(false);
   const navigation = useNavigation();
   const [isLoading, setisLoading] = React.useState(false);
@@ -24,12 +49,11 @@ export default function PhoneInput() {
     React.useCallback(() => {
       const onBackPress = () => {
         console.log("back pressed");
-        
-      navigation.reset({
-        index: 0,
-        routes: [{ name: bottomTabScreens.HomeScreen.name }],
-      });
-         
+
+        navigation.reset({
+          index: 0,
+          routes: [{ name: bottomTabScreens.HomeScreen.name }],
+        });
       };
 
       const subscription = BackHandler.addEventListener(
@@ -72,9 +96,7 @@ export default function PhoneInput() {
       }}
     >
       <View style={{ flex: 1, justifyContent: "center" }}>
-        <PrimaryAuthHeader
-          headText={"Sign in to Bahurani Brand !"}
-        />
+        <PrimaryAuthHeader headText={"Sign in to Bahurani Brand !"} />
       </View>
       <View style={{ flex: 1, justifyContent: "center" }}>
         <View>

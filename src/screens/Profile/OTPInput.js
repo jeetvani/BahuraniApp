@@ -41,8 +41,12 @@ export default function OTPInput({ route }) {
     return () => RNOtpVerify.removeListener();
   }, []);
 
-  const otpHandler = (message: String) => {
-    const otp = /(\d{4})/g.exec(message)[1];
+  const otpHandler = (message:String) => {
+    console.log(message);
+    // const otp = /(\d{4})/g.exec(message)[1];
+    
+    // console.log(otp);
+
     RNOtpVerify.removeListener();
     Keyboard.dismiss();
   };

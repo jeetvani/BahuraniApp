@@ -22,6 +22,7 @@ export default function Orders({ route }) {
   const [OrderData, setOrderData] = useState([]);
   const getUserOrders = async () => {
     getOrdersAPI().then((response) => {
+      console.log(response.data);
       const data = response.data.OrderData[0].Order_Data;
 
       setOrderData(response.data.OrderData);
@@ -151,10 +152,11 @@ paddingVertical:4,
                   </View>
                   <View
                     style={{
-                      flex: 1.5,
-                      justifyContent: "center",
+                      flex: 1.3,
                       alignItems: "center",
-                    }}
+                      left:10
+
+                       }}
                   >
                     <FlatList
                       data={item.Order_Data}
@@ -162,7 +164,7 @@ paddingVertical:4,
                       renderItem={(element) => (
                         <View
                           style={{
-                            marginHorizontal: 5,
+                            marginHorizontal: 3,
                             marginVertical: 5,
                             alignItems: "center",
                           }}
