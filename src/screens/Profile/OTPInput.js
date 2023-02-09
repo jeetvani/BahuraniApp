@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Dimensions } from "react-native";
+import { View, Text, TextInput, Dimensions, Keyboard } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { COLORS } from "../../Constants/res/COLORS";
 import PrimaryAuthHeader from "../../Components/Auth/PrimaryAuthHeader";
@@ -14,9 +14,38 @@ import OTPTextInput from "react-native-otp-textinput";
 import OTPInputView from "react-native-otp-box";
 import CodeInput from "react-native-confirmation-code-input";
 import generateOTP from "../../functions/generateOTP";
+import RNOtpVerify from "react-native-otp-verify";
 export default function OTPInput({ route }) {
+  const [Timer, setTimer] = useState(30);
+  //make a 30 sec timer using ref and useEffect
 
+  const timer = useRef(30);
+  useEffect(() => {
+   const OurTimer =  setInterval(() => {
+      if (timer.current == 1) {
+        clearInterval(OurTimer);
+      }
 
+      timer.current = timer.current - 1;
+      setTimer(timer.current);
+    }, 1000);
+  }, []);
+
+  React.useEffect(() => {
+    RNOtpVerify.getHash().then(console.log).catch(console.log);
+
+    RNOtpVerify.getOtp()
+      .then((p) => RNOtpVerify.addListener(otpHandler))
+      .catch((p) => console.log(p));
+
+    return () => RNOtpVerify.removeListener();
+  }, []);
+
+  const otpHandler = (message: String) => {
+    const otp = /(\d{4})/g.exec(message)[1];
+    RNOtpVerify.removeListener();
+    Keyboard.dismiss();
+  };
   const navigation = useNavigation();
   let verificationId = route.params.verificationId;
   const phoneNumber = route.params.phoneNumber;
@@ -120,19 +149,18 @@ export default function OTPInput({ route }) {
       <View style={{ flex: 0.2 }}>
         <Text
           style={{
-            textAlign:'right',
+            textAlign: "right",
             color: COLORS.primary,
             fontWeight: "bold",
             fontSize: 16,
             marginLeft: 10,
           }}
           onPress={() => {
-            generateOTP('+91'+  phoneNumber);
+            generateOTP("+91" + phoneNumber);
           }}
         >
-          Resend OTP
+          Resend OTP in {Timer} sec
         </Text>
-        
       </View>
       <View style={{ paddingBottom: 30, flex: 1, justifyContent: "flex-end" }}>
         <PrimaryButton

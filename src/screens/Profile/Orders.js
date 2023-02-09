@@ -21,12 +21,11 @@ export default function Orders({ route }) {
   const [isLoading, setisLoading] = useState(true);
   const [OrderData, setOrderData] = useState([]);
   const getUserOrders = async () => {
-    // getOrdersAPI().then((response) => {
-    //   const data = response.data.OrderData[0].Order_Data;
-    //   const m = JSON.parse(data[0].ProductData);
-    //   console.log(m);
-    //   setOrderData(response.data.OrderData);
-    // });
+    getOrdersAPI().then((response) => {
+      const data = response.data.OrderData[0].Order_Data;
+
+      setOrderData(response.data.OrderData);
+    });
   };
 
   const navigation = useNavigation();
@@ -54,8 +53,11 @@ export default function Orders({ route }) {
         <View style={{ marginTop: 10 }}>
           <View style={{ marginTop: 10 }}>
             <FlatList
+            style={{
+              marginBottom:40
+            }}
               showsVerticalScrollIndicator={false}
-              data={Data.fakeOrder}
+              data={OrderData}
               renderItem={({ item }) => (
                 <View
                   style={{
@@ -77,7 +79,7 @@ export default function Orders({ route }) {
                     <Text
                       style={{
                         fontSize: 18,
-
+                         
                         color: COLORS.black,
                       }}
                     >
@@ -92,17 +94,36 @@ export default function Orders({ route }) {
                     >
                       {item.Address[0].Address}
                     </Text>
+                    <Text
+                      style={{
+                        fontSize: 14,
+
+                        color: COLORS.black,
+                      }}
+                    >
+                      {item.Address[0].PinCode  }
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+paddingVertical:4,
+                        color: COLORS.black,
+                      }}
+                    >
+                    Ordered On : {item.OrderDate}
+                    </Text>
+                  
                     <FlatList
                       data={item.Order_Data}
                       renderItem={({ item }) => (
-                        <View style={{ marginVertical: 2 }}>
+                        <View style={{ marginVertical:3 }}>
                           <Text
                             style={{
                               fontWeight: "bold",
                             }}
                           >
                             {item.ProductData.ProductName} x{" "}
-                            {item.ProductData.Quantity} (
+                            {item.ProductData.Quantity} (₹{""}
                             {item.ProductData.ourPrice *
                               item.ProductData.Quantity}
                             )
@@ -114,11 +135,14 @@ export default function Orders({ route }) {
                     <Text
                       style={{
                         paddingVertical: 5,
+                        fontSize: 16,
                         color:
                           item.Status == "Delivered"
                             ? COLORS.Positive
                             : COLORS.Yellow,
-                      }}
+                      
+                          }}
+                      
                     >
                       {item.Status == "Delivered"
                         ? `Delivered on ${item.OrderDate}`
@@ -139,11 +163,13 @@ export default function Orders({ route }) {
                         <View
                           style={{
                             marginHorizontal: 5,
+                            marginVertical: 5,
+                            alignItems: "center",
                           }}
                         >
                           <Image
-                            width={50}
-                            height={50}
+                            width={60}
+                            height={60}
                             source={{
                               uri: element.item.ProductData.ProductImage,
                             }}

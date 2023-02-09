@@ -170,9 +170,11 @@ export default function ProductCard({
       <View style={styles.Container}>
         <TouchableWithoutFeedback
           onPress={() => {
-            navigation.navigate(appStackScreens.ProductDetails.name, {
-              ProductId,
-            });
+            onPress
+              ? onPress()
+              : navigation.navigate(appStackScreens.ProductDetails.name, {
+                  ProductId,
+                });
           }}
           style={{ alignItems: "center" }}
         >
@@ -273,7 +275,7 @@ export default function ProductCard({
                 onPress={addToCart}
                 style={styles.addToCartButtonContainer}
               >
-                <Text style={{paddingVertical:3 }} >
+                <Text style={{ paddingVertical: 3 }}>
                   <Ionicons name="add" color={COLORS.primary} size={18} />
                 </Text>
               </TouchableOpacity>

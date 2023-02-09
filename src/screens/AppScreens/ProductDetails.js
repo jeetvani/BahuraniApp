@@ -33,7 +33,7 @@ import { appStackScreens, bottomTabScreens } from "../../Constants/appScreens";
 import { addToWishlistAPI } from "../../API/lib/user";
 export default function ProductDetails({ route }) {
   const navigation = useNavigation();
-  const [ProductId,setProductId] = useState(route.params.ProductId);
+  const [ProductId, setProductId] = useState(route.params.ProductId);
   const [IsExistsInWishList, setIsExistsInWishList] = useState(false);
   const [Quantity, setQuantity] = useState(1);
   const [PrefferableProducts, setPrefferableProducts] = useState([]);
@@ -124,53 +124,65 @@ export default function ProductDetails({ route }) {
     });
   };
 
+  const getProductDetails = async (PRODUCTID) => {
+    PRODUCTID = PRODUCTID ? setProductId(PRODUCTID) : null;
+    setisLoading(true);
+    await getProductById(PRODUCTID ? PRODUCTID : ProductId)
+      .then(async (res) => {
+        const ProductName = res.data[0].ProductName;
+        setProductName(ProductName);
+        setVariants(res.data[0].Variants);
+        setSelectedVariant(res.data[0].Variants[0]);
+        setProductDescription(res.data[0].ProductDescription);
+        setProductImages(res.data[0].ProductImages);
+        setCategoryName(res.data[0].Category);
+        setCategoryId(res.data[0].CategoryId);
+        await getPreferableProducts().then(async (res) => {
+          const result = await res.data.PreferableProducts;
+          //if ppoduct id is same as current product id then remove it from the list
+          const filteredResult = result.filter(
+            (item) => item.ProductId != ProductId
+          );
+
+          setPrefferableProducts(filteredResult);
+
+          await checkAuth().then((res) => {
+            if (res) {
+              checkProductInCartAPI(ProductId)
+                .then((response) => {
+                  console.log(response.data);
+                  if (response.data.status == 100) {
+                    setIsExitsInCart(true);
+                    setQuantity(response.data.quantity);
+                  }
+                })
+                .catch((err) => {
+                  console.log(err);
+                })
+                .finally(() => {
+                  checkProductInWishlistAPI(ProductId).then((response) => {
+                    console.log(response.data);
+                    if (response.data.status == 100) {
+                      setIsExistsInWishList(true);
+                    }
+                  });
+                });
+            }
+          });
+        });
+      })
+      .finally(() => {
+        setTimeout(() => {
+          setisLoading(false);
+        }, 500);
+      });
+  };
+
   const [subs, setSubs] = React.useState([]);
   React.useEffect(() => {
     setSubs([
       navigation.addListener("focus", async () => {
-        await getProductById(ProductId)
-          .then(async (res) => {
-            const ProductName = res.data[0].ProductName;
-            setProductName(ProductName);
-            setVariants(res.data[0].Variants);
-            setSelectedVariant(res.data[0].Variants[0]);
-            setProductDescription(res.data[0].ProductDescription);
-            setProductImages(res.data[0].ProductImages);
-            setCategoryName(res.data[0].Category);
-            setCategoryId(res.data[0].CategoryId);
-            await getPreferableProducts().then(async (res) => {
-              setPrefferableProducts(res.data.PreferableProducts);
-
-              await checkAuth().then((res) => {
-                if (res) {
-                  checkProductInCartAPI(ProductId)
-                    .then((response) => {
-                      console.log(response.data);
-                      if (response.data.status == 100) {
-                        setIsExitsInCart(true);
-                        setQuantity(response.data.quantity);
-                      }
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    })
-                    .finally(() => {
-                      checkProductInWishlistAPI(ProductId).then((response) => {
-                        console.log(response.data);
-                        if (response.data.status == 100) {
-                          setIsExistsInWishList(true);
-                        }
-                      });
-                    });
-                }
-              });
-            });
-          })
-          .finally(() => {
-            setTimeout(() => {
-              setisLoading(false);
-            }, 500);
-          });
+        getProductDetails();
       }),
     ]);
 
@@ -179,7 +191,7 @@ export default function ProductDetails({ route }) {
     };
     // Remove all listeners, because there have to be no listeners on unmounted screen
     return () => unsubscribe();
-  }, [ProductId]);
+  }, []);
 
   const addToWishList = async () => {
     addToWishlistAPI(ProductId)
@@ -338,9 +350,9 @@ export default function ProductDetails({ route }) {
                   data={PrefferableProducts}
                   renderItem={({ item }) => (
                     <ProductCard
-                    onPress={() => {
-                      setProductId(item.ProductId);
-                    }}
+                      onPress={() => {
+                        getProductDetails(item.ProductId);
+                      }}
                       Variants={item.Variants}
                       img={item.ProductImages[0]}
                       mrp={item.Variants[0].mrp}
