@@ -168,8 +168,10 @@ paddingVertical:4,
                           }}
                         >
                           <Image
-                            width={60}
-                            height={60}
+                            width={
+                              item.Order_Data.length==1?
+                              100:80}
+                            height={item.Order_Data.length==1?100:80}
                             source={{
                               uri: element.item.ProductData.ProductImage,
                             }}

@@ -30,9 +30,9 @@ export default function AccountDetails() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isMakrketingUser, setIsMarketingUser] = useState(false);
   const navigation = useNavigation();
-  
+
   const [subs, setSubs] = React.useState([]);
-  
+
   React.useEffect(() => {
     setSubs([
       navigation.addListener("focus", () => {
@@ -53,21 +53,15 @@ export default function AccountDetails() {
           .finally(() => {
             setLoading(false);
           });
-    
       }),
     ]);
-
 
     const unsubscribe = () => {
       navigation.removeAllListeners();
     };
     // Remove all listeners, because there have to be no listeners on unmounted screen
     return () => unsubscribe();
-  }, [
-    
-  ]);
-
-
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -161,10 +155,10 @@ export default function AccountDetails() {
                 icon={"user-edit"}
                 fontSize={14}
                 onPress={() => {
-                  navigation.navigate(authStackScreens.EditProfile.name,{
-                    phoneNumber:phoneNumber,
-                    profilePicture:profilePicture,
-                    userName:userName
+                  navigation.navigate(authStackScreens.EditProfile.name, {
+                    phoneNumber: phoneNumber,
+                    profilePicture: profilePicture,
+                    userName: userName,
                   });
                 }}
                 borderRadius={4}
@@ -173,7 +167,6 @@ export default function AccountDetails() {
               />
             </View>
 
-     
             <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
               <PrimaryButton
                 borderColor={COLORS.black}
@@ -190,23 +183,24 @@ export default function AccountDetails() {
                 borderWidth={0.4}
               />
             </View>
-           
-            <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
-              <PrimaryButton
-                borderColor={COLORS.black}
-                textColor={COLORS.black}
-                textAlign={"left"}
-                onPress={()=>{
-                  navigation.navigate(authStackScreens.Referrals.name)
-                }}
-                content={"Your Referrals & Rewards"}
-                icon={"award"}
-                fontSize={14}
-                borderRadius={4}
-                buttonHeight={50}
-                borderWidth={0.4}
-              />
-            </View>
+            {isMakrketingUser ? (
+              <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
+                <PrimaryButton
+                  borderColor={COLORS.black}
+                  textColor={COLORS.black}
+                  textAlign={"left"}
+                  onPress={() => {
+                    navigation.navigate(authStackScreens.Referrals.name);
+                  }}
+                  content={"Your Referrals & Rewards"}
+                  icon={"award"}
+                  fontSize={14}
+                  borderRadius={4}
+                  buttonHeight={50}
+                  borderWidth={0.4}
+                />
+              </View>
+            ) : null}
 
             <View style={{ marginVertical: 10, marginHorizontal: 10 }}>
               <PrimaryButton

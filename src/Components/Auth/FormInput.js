@@ -13,8 +13,8 @@ export default function FormInput({
   return (
     <View
       style={{
-        borderColor: COLORS.black,
-        borderWidth: 0.4,
+        borderColor: COLORS.gray,
+        borderWidth: 1,
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
